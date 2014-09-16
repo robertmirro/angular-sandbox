@@ -15,12 +15,24 @@
             <img ng-src="{{ product.images[ 0 ].thumb }}" />
             <button ng-show="product.canPurchase"> Add to Cart </button>
 
-            <ul class="nav nav-pills">
+            <ul class="nav nav-pills" ng-init="tab = 1">
                 <li><a href="" ng-click="tab = 1">Description</a></li>
                 <li><a href="" ng-click="tab = 2">Specifications</a></li>
                 <li><a href="" ng-click="tab = 3">Reviews</a></li>
             </ul>
-            tab selected: {{ tab }}
+            <div style="display:none;">tab selected: {{ tab }}</div>
+            <div class="panel" ng-show="tab === 1">
+                <h4>Description</h4>
+                <p>{{ product.description }}</p>
+            </div>                
+            <div class="panel" ng-show="tab === 2">
+                <h4>Specifications</h4>
+                <blockquote>None yet</blockquote>
+            </div>                
+            <div class="panel" ng-show="tab === 3">
+                <h4>Reviews</h4>
+                <blockquote>None yet</blockquote>
+            </div>                
         </div>
     </div>
 
