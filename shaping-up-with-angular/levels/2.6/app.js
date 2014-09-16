@@ -5,6 +5,18 @@
         this.products = gems;
     });
 
+    app.controller( 'PanelController' , function() {
+        this.tab = 1;  // set "tab" property in lieu of ng-init to set initial tab
+
+        this.selectTab = function( tab ) {
+            this.tab = tab;
+        };
+
+        this.isSelected = function( tab ) {
+            return tab == this.tab;
+        }
+    });
+
     var gems = [ 
         {
             name : 'Dodecahedron' ,
