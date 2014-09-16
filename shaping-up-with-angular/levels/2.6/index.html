@@ -16,9 +16,9 @@
             <button ng-show="product.canPurchase"> Add to Cart </button>
 
             <ul class="nav nav-pills" ng-init="tab = 1">
-                <li><a href="" ng-click="tab = 1">Description</a></li>
-                <li><a href="" ng-click="tab = 2">Specifications</a></li>
-                <li><a href="" ng-click="tab = 3">Reviews</a></li>
+                <li ng-class="{ active:tab === 1 }"><a href="" ng-click="tab = 1">Description</a></li>
+                <li ng-class="{ active:tab === 2 }"><a href="" ng-click="tab = 2">Specifications</a></li>
+                <li ng-class="{ active:tab === 3 }"><a href="" ng-click="tab = 3">Reviews</a></li>
             </ul>
             <div style="display:none;">tab selected: {{ tab }}</div>
             <div class="panel" ng-show="tab === 1">
