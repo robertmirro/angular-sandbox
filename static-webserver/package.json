@@ -1,0 +1,16 @@
+{
+  "name": "static-webserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "static_webserver.js",
+  "dependencies": {
+    "dateformat": "^1.0.8",
+    "express": "^4.9.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RJM",
+  "license": "MIT"
+}
