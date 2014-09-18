@@ -1,23 +1,9 @@
 (function () {
-    var app = angular.module( 'store' , [] );
+    var app = angular.module( 'store' , [ 'store-products' ] );
 
     app.controller( 'StoreController' , function() {
         this.products = gems;
     });
-
-
-    // MOVE THIS CONTROLLER LOGIC INSIDE OF "productTabs" CUSTOM DIRECTIVE BELOW
-    // app.controller( 'PanelController' , function() {
-    //     this.tab = 1;  // set "tab" property in lieu of ng-init to set initial tab
-
-    //     this.selectTab = function( tab ) {
-    //         this.tab = tab;
-    //     };
-
-    //     this.isSelected = function( tab ) {
-    //         return tab == this.tab;
-    //     }
-    // });
 
     app.controller( 'ReviewController' , function() {
         this.review = {};
@@ -26,38 +12,6 @@
             product.reviews.push( this.review );
             this.review = {};  // reset form after submit, reset live 2-way bound review fields
         };
-    });
-
-    // use custom directive to display product name/price instead of using ng-include to load product-title.html.
-    // directive tag name translates to directive name referenced below in the JS.
-    //   NOTE: dash in tag name translates to camelCase JS name
-    //     ex: tag = <product-title> -->  productTitle JS name
-    app.directive( 'productTitle' , function() {
-        // return a directive definition object
-        return {
-            restrict: 'E' ,  // directive type: E = Element , A = Attribute
-            templateUrl: 'product-title.html'
-        };
-    });
-
-    app.directive( 'productTabs' , function() {
-        return {
-            restrict : 'E' , 
-            templateUrl : 'product-tabs.html' ,
-            controller : function() {
-                this.tab = 1;  // set "tab" property in lieu of ng-init to set initial tab
-
-                this.selectTab = function( tab ) {
-                    this.tab = tab;
-                };
-
-                this.isSelected = function( tab ) {
-                    return tab == this.tab;
-                }
-            } ,
-            controllerAs : 'panel'
-        };
-
     });
 
     var gems = [ 

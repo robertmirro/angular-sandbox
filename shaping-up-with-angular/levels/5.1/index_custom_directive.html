@@ -13,8 +13,6 @@
 </head>
 <body ng-controller="StoreController as store">
 
-    <!-- {{ 'hello world!' }} -->
-
     <div class="list-group">
         <div class="list-group-item" ng-repeat="product in store.products" ng-hide="product.soldOut">
             <!-- 
@@ -29,11 +27,6 @@
                     2. http://localhost:8080/index_custom_directive.html
             -->
             <product-title></product-title>
-             
-<!-- 
-            <h1> {{ product.name }} </h1>
-            <h2> {{ product.price | currency }} </h2>
- -->            
             
             <p> {{ product.description }} </p>
             <img ng-src="{{ product.images[ 0 ].thumb }}" />
@@ -41,57 +34,11 @@
 
             <product-tabs></product-tabs>
 
-<!-- MOVE THE UI BELOW INTO "product-tabs.html" AND USE "<product-tabs>" CUSTOM DIRECTIVE TO RENDER IT -->
-<!--             <section ng-controller="PanelController as panel">
-                <ul class="nav nav-pills">
-                    <li ng-class="{ active:panel.isSelected(1) }"><a href="" ng-click="panel.selectTab(1)">Description</a></li>
-                    <li ng-class="{ active:panel.isSelected(2) }"><a href="" ng-click="panel.selectTab(2)">Specifications</a></li>
-                    <li ng-class="{ active:panel.isSelected(3) }"><a href="" ng-click="panel.selectTab(3)">Reviews</a></li>
-                </ul>
-                <div style="display:none;">tab selected: {{ tab }}</div>
-                <div class="panel" ng-show="panel.isSelected(1)">
-                    <h4>Description</h4>
-                    <p>{{ product.description }}</p>
-                </div>                
-                <div class="panel" ng-show="panel.isSelected(2)">
-                    <h4>Specifications</h4>
-                    <blockquote>None yet</blockquote>
-                </div>                
-                <div class="panel" ng-show="panel.isSelected(3)">
-                    <h4>Reviews</h4>
-                    <blockquote ng-repeat=" review in product.reviews">
-                        <b>Stars: {{ review.stars }}</b> <br />                      
-                        {{ review.body }} <br />
-                        <cite>by: {{ review.author }}</cite>
-                    </blockquote>
-                    <form name="reviewForm" 
-                        ng-controller="ReviewController as reviewCtrl"
-                        ng-submit="reviewForm.$valid && reviewCtrl.addReview( product )" 
-                        novalidate>
-                        <blockquote>
-                            <b>Stars: {{ reviewCtrl.review.stars }}</b> <br />
-                            {{ reviewCtrl.review.body }} <br />
-                            <cite>by: {{ reviewCtrl.review.author }}</cite>
-                        </blockquote>
-                        <h3>Submit a Review</h3>
-                        <select ng-model="reviewCtrl.review.stars" required>
-                            <option value="1">1 star</option>
-                            <option value="2">2 stars</option>
-                            <option value="3">3 stars</option>
-                            <option value="4">4 stars</option>
-                        </select> <br />
-                        <textarea ng-model="reviewCtrl.review.body" required></textarea> <br />
-                        <label for "email">by:</label>
-                        <input id="email" type="email" ng-model="reviewCtrl.review.author" required /> <br />
-                        <div> reviewForm is {{ reviewForm.$valid }}</div>
-                        <input type="submit" value="Submit" />
-                    </form>
-                </div>   
-            </section>             
- -->        </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="../../angular.min.js"></script>
     <script type="text/javascript" src="app_custom_directive.js"></script>
+    <script type="text/javascript" src="products.js"></script>
 </body>
 </html>
