@@ -37,4 +37,13 @@
 
     });
 
+    app.controller( 'ReviewController' , function() {
+        this.review = {};
+
+        this.addReview = function( product ) {
+            product.reviews.push( this.review );
+            this.review = {};  // reset form after submit, reset live 2-way bound review fields
+        };
+    });
+
 })();

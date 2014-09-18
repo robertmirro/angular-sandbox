@@ -1,17 +1,9 @@
 (function () {
+    // NOTE: "store-products" is now a dependency of "store"
     var app = angular.module( 'store' , [ 'store-products' ] );
 
     app.controller( 'StoreController' , function() {
         this.products = gems;
-    });
-
-    app.controller( 'ReviewController' , function() {
-        this.review = {};
-
-        this.addReview = function( product ) {
-            product.reviews.push( this.review );
-            this.review = {};  // reset form after submit, reset live 2-way bound review fields
-        };
     });
 
     var gems = [ 
