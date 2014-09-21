@@ -1,0 +1,16 @@
+{
+  "name": "angular-in-60ish-minutes",
+  "version": "1.0.0",
+  "description": "The Visual Studio 2012 solution is designed to run with IIS Express. To open it follow these steps:",
+  "main": "server.js",
+  "dependencies": {
+    "connect": "^2.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
