@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <style>
+            span {
+                padding: 4px;
+                background-color: #CCC;
+            }
+        </style>
+    </head>
+    <body ng-app="">
+
+        <h3>ng-model directive with data binding (generic ng-app, no controller)</h3>
+
+        <div class="container">
+            Name: <input type="text" ng-model="name" />  <span>{{ name }}</span>
+        </div>
+
+        <h3>ng-init array values, ng-repeat to iterate names array</h3>
+
+        <div class="container" ng-init="names=['Robert','Dave','John','Mike','Joe']">
+            <ul>
+                <li ng-repeat="personName in names">{{ personName }}</li>
+            </ul>
+        </div>
+
+        <script src="../Scripts/angular.js"></script>
+    </body>
+</html>
