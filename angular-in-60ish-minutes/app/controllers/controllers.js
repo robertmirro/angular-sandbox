@@ -74,6 +74,8 @@ app.controller('OrdersController', function ($scope, customersService) {
 });
 
 app.controller('NavbarController', function ($scope, $location) {
+    console.log( 'NavbarController: $scope:' , $scope );
+    console.log( 'NavbarController: $location:' , $location );
     $scope.getClass = function (path) {
         if ($location.path().substr(0, path.length) == path) {
             return true
