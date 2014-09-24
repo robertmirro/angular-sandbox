@@ -14,14 +14,14 @@
         <h3>ng-model directive with data binding (generic ng-app, no controller)</h3>
 
         <div class="container">
-            Name: <input type="text" ng-model="name" />  <span>{{ name }}</span>
+            Name: <input type="text" ng-model="nameText" />  <span>{{ nameText | uppercase }}</span>
         </div>
 
         <h3>ng-init array values, ng-repeat to iterate names array</h3>
 
         <div class="container" ng-init="names=['Robert','Dave','John','Mike','Joe']">
             <ul>
-                <li ng-repeat="personName in names">{{ personName }}</li>
+                <li ng-repeat="personName in names | filter:nameText">{{ personName }}</li>
             </ul>
         </div>
 
