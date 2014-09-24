@@ -21,7 +21,15 @@
 
         <div class="container" ng-init="names=['Robert','Dave','John','Mike','Joe']">
             <ul>
-                <li ng-repeat="personName in names | filter:nameText">{{ personName }}</li>
+                <li ng-repeat="personName in names">{{ personName }}</li>
+            </ul>
+        </div>
+
+        <h3>ng-init array of object values, ng-repeat to iterate objects array, filter by nameText input, orderBy name</h3>
+
+        <div class="container" ng-init="persons=[{name:'Robert',city:'Alexandria'},{name:'Dave',city:'West Pittston'},{name:'John',city:'Reston'},{name:'Mike',city:'Philadelpha'},{name:'Joe',city:'NYC'}]">
+            <ul>
+                <li ng-repeat="person in persons | filter:nameText | orderBy:'name'">{{ person.name }} - {{ person.city | lowercase }}</li>
             </ul>
         </div>
 
