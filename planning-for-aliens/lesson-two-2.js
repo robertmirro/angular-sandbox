@@ -78,8 +78,8 @@
 
         // NOTE: using this manual injector logic, <input> is 2-way bound to text but initial text value
         //      is not populated in <input>.
-        Array.prototype.slice.call( element ).map( function( element ) {
-            console.log( 'element: ' , element );
+        Array.prototype.slice.call( element ).forEach( function( element ) {
+            console.log( 'element: %O' , element );
             document.body.appendChild( element );
         });
 
