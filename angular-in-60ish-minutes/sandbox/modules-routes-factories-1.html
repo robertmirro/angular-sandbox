@@ -26,9 +26,10 @@
         </div>
 
         <script src="../Scripts/angular.js"></script>
+        <script src="../Scripts/angular-route.js"></script>
 
         <script>
-            var app = angular.module( 'DemoApp' , [] );
+            var app = angular.module( 'DemoApp' , [ 'ngRoute' ] );
 
             // an alternate syntax to define controller(s)
             var controllers = {};
@@ -52,6 +53,25 @@
             //         { name : 'Joe' , city : 'NYC' }
             //     ];
             // });
+
+            // routing changes made after video: 
+            // http://weblogs.asp.net/dwahlin/angularjs-routing-changes
+            //
+            // NOTE: these routes are not functional in this example when running app as file:// from chrome
+            app.config( function( $routeProvider ) {
+                $routeProvider.when( '/' , {
+                    controller : 'SimpleController' ,
+                    templateUrl : 'View1.html'
+                })
+                .when( '/partial2' , {
+                    controller : 'SimpleController' ,
+                    templateUrl : 'View2.html'
+                })
+                .otherwise( {
+                     redirectTo : '/' 
+                });
+            });
+
         </script>
 
     </body>
