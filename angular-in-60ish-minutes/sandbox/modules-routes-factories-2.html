@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <style>
+            span {
+                padding: 4px;
+                background-color: #CCC;
+            }
+        </style>
+    </head>
+    <body ng-app="DemoApp">
+
+        <div>
+            <!-- use placeholder for views -->
+            <div class="nothingness" ng-view=""></div>
+        </div>
+
+        <script src="../Scripts/angular.js"></script>
+        <script src="../Scripts/angular-route.js"></script>
+
+        <script>
+            var app = angular.module( 'DemoApp' , [ 'ngRoute' ] );
+
+            // routing changes made after video: 
+            // http://weblogs.asp.net/dwahlin/angularjs-routing-changes
+            //
+            // NOTE: views do NOT define controllers, routes (below) define which controller is used for each view
+            //
+            // TO TEST: http://localhost:8080/sandbox/modules-routes-factories-2.html
+            //
+            app.config( function( $routeProvider ) {
+                $routeProvider.when( '/view1' , {  /* used "/view1" for demonstation purposes, could have use "/" too */
+                    controller : 'CustomerController' ,
+                    templateUrl : 'partials/view1.html'
+                })
+                .when( '/view2' , {
+                    controller : 'CustomerController' ,
+                    templateUrl : 'partials/view2.html'
+                })
+                .otherwise( {
+                     redirectTo : '/view1' /* use whatever value is used for 1st route above */
+                });
+            });
+
+            // an alternate syntax to define controller(s)
+            app.controller( 'CustomerController' , function( $scope ) {
+                $scope.customers = [
+                    { name : 'Robertt' , city : 'Alexandria' } ,
+                    { name : 'Dave' , city : 'West Pittston' } ,
+                    { name : 'John' , city : 'Reston' } ,
+                    { name : 'Mike' , city : 'Philadelpha' } ,
+                    { name : 'Joe' , city : 'NYC' }
+                ];
+
+                // customer data is not saved anywhere so its lost when navigating between views
+                $scope.addCustomer = function() {
+                    $scope.customers.push( {
+                        name : $scope.newCustomer.name , 
+                        city : $scope.newCustomer.city
+                    });
+                };
+            });
+        </script>
+
+    </body>
+</html>
