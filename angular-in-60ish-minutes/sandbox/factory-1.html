@@ -43,7 +43,10 @@
                 });
             });
 
-            app.factory( 'CustomerFactory' , function() {
+            app.factory( 'CustomerFactory' , function( /* $http */ ) {
+                // could dynamically inject $http into factory then use get/post/etc to retrieve data from RESTful api
+                // console.dir( $http );
+
                 var factory = {}
                     customers = [
                         { name : 'Robertt' , city : 'Alexandria' } ,
@@ -54,15 +57,32 @@
                     ];
 
                 factory.getCustomers = function getCust() {
-                    return customers;  // can NOT use this.customers
+                    return customers;  // can NOT use this.customers in a factory
                 };
 
                 return factory;
             });
 
+            // using a service instead of a factory, simulate factory logic above
+            // NOTE: anonymous function is the object, think of it as "new function()"
+            app.service( 'CustomerService' , function() {
+                var customers = [
+                        { name : 'Roberttt' , city : 'Alexandria' } ,
+                        { name : 'Daveee' , city : 'West Pittston' } ,
+                        { name : 'Johnnn' , city : 'Reston' } ,
+                        { name : 'Mikeee' , city : 'Philadelpha' } ,
+                        { name : 'Joeee' , city : 'NYC' }
+                    ];
+
+                this.getCustomers = function getCust() {
+                    return customers;  // can NOT use this.customers in a factory
+                };
+            });
+
+
             // an alternate syntax to define controller(s)
-            app.controller( 'CustomerController' , function( $scope , CustomerFactory ) {
-                $scope.customers = CustomerFactory.getCustomers();
+            app.controller( 'CustomerController' , function( $scope , /*CustomerFactory*/ CustomerService ) {
+                $scope.customers = /*CustomerFactory.getCustomers()*/ CustomerService.getCustomers();
 
                 // console.dir( CustomerFactory );
 
