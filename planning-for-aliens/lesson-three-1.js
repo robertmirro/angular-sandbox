@@ -1,6 +1,8 @@
 (function () {
     'use strict';
 
+    // specify our namespace as "HelloWorld"
+    // NOTE: angulars internam namespace is "ng"
     var app = angular.module( 'HelloWorld' , [] );
 
     // use angular DI to inject $scope and $rootScope into controller, add $compile too
