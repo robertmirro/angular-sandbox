@@ -1,0 +1,41 @@
+<!doctype html>
+<html data-ng-app="">
+    <head>
+        <title>more directives</title>
+        
+        <link rel="stylesheet" href="scripts/angular-styles.css" />
+    </head>
+    <!--    
+        ng-cloak = control initial flicker when angular loads.  
+                   sets css style display:none to hide element.
+                   NOTE: if angular.js is placed as is below, flicker will still occur, so
+                         to avoid that, place angular ng-cloak css style (from angular.js) 
+                         in its own .css.
+
+        ng-switch = test a value and then show/hide things (probably best to only use this
+                    for simple DOM logic).
+
+        ng-class = set class values based on data values.
+
+        ng-show
+    -->
+    <body data-ng-init="data={ name:'Robert' , isVisible:true , loggedIn:false , status:'red'}">
+        <div data-ng-cloak>
+            <div data-ng-switch on="data.loggedIn">
+                <div data-ng-switch-when="true">
+                    Hello {{ data.name }}!
+                </div>
+                
+                <div data-ng-switch-default data-ng-class="data.status">Login</div>
+                <!-- could also use data-ng-switch="false" -->
+            </div>
+            <br />
+
+            <div data-ng-show="data.isVisible">
+                Name: <input type="text" data-ng-model="data.name" />
+                {{ data.name }}
+            </div>
+        </div>
+        <script src="scripts/angular.js"></script>
+    </body>
+</html>
