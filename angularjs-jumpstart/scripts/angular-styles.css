@@ -9,3 +9,23 @@
 .blue {
     color: blue;
 }
+
+table {
+    border: solid 1px #000;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #EEE;
+    border: solid 1px #999;
+    padding: 4px;
+}
+
+td {
+    border: solid 1px #EEE;
+    padding: 4px;
+}
+
+
+
+

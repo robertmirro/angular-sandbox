@@ -1,0 +1,16 @@
+<!doctype html>
+<html data-ng-app="">
+    <head>
+        <title>iterating data</title>
+    </head>
+    <body>
+        <div data-ng-init="names=['Robert','Rob','Bob','Bobby']">
+            <h3></h3>
+            <ul>
+                <li data-ng-repeat="name in names">{{ name }}</li>
+            </ul>
+        </div>
+        
+        <script src="scripts/angular.js"></script>
+    </body>
+</html>
