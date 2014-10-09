@@ -1,0 +1,32 @@
+<!doctype html>
+<html data-ng-app="">
+    <head>
+        <title>sorting and formatting</title>
+        <link rel="stylesheet" href="scripts/angular-styles.css" />
+    </head>
+    <body data-ng-cloak>
+        <div data-ng-init="people=[{name:'Robert',city:'Alexandria',rate:9.99},{name:'Rob',city:'DC',rate:4.84},{name:'Bob',city:'Philly',rate:6.9},{name:'Bobby',city:'Scranton',rate:48.12345}]">
+            Filter by name: <input type="text" data-ng-model="nameText" />
+            <br />
+            
+            <ul>
+                <li data-ng-repeat="person in people | filter:nameText | orderBy:'name'">{{ person.name }} - {{ person.city }} - {{ person.rate | currency }}</li>
+            </ul>
+        </div>
+        
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Rate</th>
+            </tr>
+            <tr data-ng-repeat="person in people | filter:nameText | orderBy:'rate'">
+                <td>{{ person.name }}</td>
+                <td>{{ person.city }}</td>
+                <td>{{ person.rate | currency }}</td>
+            </tr>
+        </table>
+        
+        <script src="scripts/angular.js"></script>
+    </body>
+</html>
