@@ -1,0 +1,36 @@
+<!doctype html>
+<html data-ng-app="">
+    <head>
+        <title>sorting with filters and limit</title>
+        <link rel="stylesheet" href="scripts/angular-styles.css" />
+    </head>
+    <body data-ng-cloak>
+        <div data-ng-init="people=[{name:'Robert',city:'Alexandria',rate:9.99,joined:'2014-01-10'},{name:'Rob',city:'DC',rate:4.84,joined:'2014-02-04'},{name:'Bob',city:'Philly',rate:6.9,joined:'2014-04-08'},{name:'Bobby',city:'Scranton',rate:48.12345,joined:'2014-08-04'}]">
+            <!-- use .name property to ensure filter ONLY filters using name otherwise all object properties are included in filter -->
+            Filter by name: <input type="text" data-ng-model="nameText.name" />
+            <br />
+            
+            <ul>
+                <li data-ng-repeat="person in people | filter:nameText | orderBy:'name'">{{ person.name }} ({{ person.city | uppercase }}) {{ person.rate | currency }} - {{ person.joined | date }}</li>
+            </ul>
+        </div>
+        
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Rate</th>
+                <th>Joined</th>
+            </tr>
+            <tr data-ng-repeat="person in people | orderBy:'rate' | limitTo:2">
+                <td>{{ person.name }}</td>
+                <td>{{ person.city }}</td>
+                <td>{{ person.rate | currency:'USD: $' }}</td>
+                <!-- NEED outer DOUBLE quotes and inner SINGLE quotes to include string literals in formats -->
+                <td>{{ person.joined | date:"EEEE, MMMM d, y 'at' h:mm:ss a" }}</td>
+            </tr>
+        </table>
+        
+        <script src="scripts/angular.js"></script>
+    </body>
+</html>
