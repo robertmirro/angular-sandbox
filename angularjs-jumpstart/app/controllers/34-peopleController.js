@@ -1,18 +1,27 @@
-function PeopleController() {
-    this.people = [
-        {name : 'Robert' , city : 'Alexandria' , rate : 9.99 , joined : '2014-01-10' } ,
-        {name : 'Rob' , city : 'DC' , rate : 4.84 , joined : '2014-02-04' } ,
-        {name : 'Bob' , city : 'Philly' , rate : 6.9 , joined : '2014-04-08' } ,
-        {name : 'Bobby' , city : 'Scranton' , rate : 48.12345 , joined : '2014-08-04' }
-    ];
+(function () {
+    'use strict';
 
-    // set defaults
-    this.sortBy = 'name';
-    this.reverse = false;                
+    var app = angular.module( 'peopleApp' , [] );
 
-    // create a sortBy var to store sort value (people.<property>), create reverse var and toggle it
-    this.sortColumn = function( propertyName ) {
-        this.sortBy = propertyName;
-        this.reverse = !this.reverse;
-    };
-}
+    app.controller( 'PeopleController' , function () {
+        this.people = [
+            {name : 'Robert' , city : 'Alexandria' , rate : 9.99 , joined : '2014-01-10' } ,
+            {name : 'Rob' , city : 'DC' , rate : 4.84 , joined : '2014-02-04' } ,
+            {name : 'Bob' , city : 'Philly' , rate : 6.9 , joined : '2014-04-08' } ,
+            {name : 'Bobby' , city : 'Scranton' , rate : 48.12345 , joined : '2014-08-04' }
+        ];
+
+        // set defaults
+        this.sortBy = 'name';
+        this.reverse = false;                
+
+        // create a sortBy var to store sort value (people.<property>), create reverse var and toggle it
+        this.sortColumn = function( propertyName ) {
+            console.log('sorting...');
+            this.sortBy = propertyName;
+            this.reverse = !this.reverse;
+        };
+    });
+
+})();
+               

@@ -1,30 +1,30 @@
 <!doctype html>
-<html data-ng-app="">
+<html data-ng-app="peopleApp">
     <head>
         <title>dynamic sorting</title>
         <link rel="stylesheet" href="scripts/angular-styles.css" />
     </head>
     <!-- Beginning in AngularJS 1.3 and higher, global functions such as PeopleController can NO LONGER BE USED -->
     <!-- Error: [ng:areq] Argument 'PeopleController' is not a function, got undefined   -->
-    <body data-ng-cloak data-ng-controller="PeopleController">
+    <body data-ng-cloak data-ng-controller="PeopleController as peopleCtrl">
         <div>
             <!-- use .name property to ensure filter ONLY filters using name otherwise all object properties are included in filter -->
             Filter by name: <input type="text" data-ng-model="nameText.name" />
             <br />
             
             <ul>
-                <li data-ng-repeat="person in people | filter:nameText | orderBy:'name'">{{ person.name }} ({{ person.city | uppercase }}) {{ person.rate | currency }} - {{ person.joined | date }}</li>
+                <li data-ng-repeat="person in peopleCtrl.people | filter:nameText | orderBy:'name'">{{ person.name }} ({{ person.city | uppercase }}) {{ person.rate | currency }} - {{ person.joined | date }}</li>
             </ul>
         </div>
         
         <table>
             <tr>
-                <th data-ng-click="sortColumn('name')">Name</th>
-                <th data-ng-click="sortColumn('city')">City</th>
-                <th data-ng-click="sortColumn('rate')">Rate</th>
-                <th data-ng-click="sortColumn('joined')">Joined</th>
+                <th data-ng-click="peopleCtrl.sortColumn('name')">Name</th>
+                <th data-ng-click="peopleCtrl.sortColumn('city')">City</th>
+                <th data-ng-click="peopleCtrl.sortColumn('rate')">Rate</th>
+                <th data-ng-click="peopleCtrl.sortColumn('joined')">Joined</th>
             </tr>
-            <tr data-ng-repeat="person in people | orderBy:sortBy:reverse">
+            <tr data-ng-repeat="person in peopleCtrl.people | orderBy:peopleCtrl.sortBy:peopleCtrl.reverse">
                 <td>{{ person.name }}</td>
                 <td>{{ person.city }}</td>
                 <td>{{ person.rate | currency:'USD: $' }}</td>
@@ -33,7 +33,7 @@
             </tr>
         </table>
         <br />
-        <span>Total people: {{ people.length }}</span>
+        <span>Total people: {{ peopleCtrl.people.length }}</span>
         
         <script src="scripts/angular.js"></script>
         <script src="app/controllers/34-peopleController.js"></script>
