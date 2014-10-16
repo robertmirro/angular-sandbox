@@ -1,21 +1,28 @@
 (function () {
     'use strict';
 
+    function serviceConstructor() {
+        this.serviceValue = 'Service data...';
+    }
+    
     angular.module( 'providers' , [] )
         .provider( 'aProvider' , { $get : 
             function() {
-                return 'I am a Provider';
+                return 'Provider data...';
             }
         })
         .factory( 'aFactory' , function() {
-            return 'Ima Factory';
+            return 'Factory data...';
         }) 
+        .service( 'aService', serviceConstructor )
+        .value( 'aValue' , 'Value value...')
         .controller( 'aController' , 
-        [ '$scope' , 'aProvider' , 'aFactory' ,  
-            function( $scope , aProvider , aFactory ) {
+        [ '$scope' , 'aProvider' , 'aFactory' , 'aService' , 'aValue' ,  
+            function( $scope , aProvider , aFactory , aService , aValue ) {
                 $scope.providerValue = aProvider;
                 $scope.factoryValue = aFactory;
+                $scope.serviceValue = aService.serviceValue;
+                $scope.valueValue = aValue;
             }
-        ])
-    ;
+        ]);
 })();
