@@ -1,0 +1,31 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+  
+.red {
+    color : red;
+}
+
+.blue {
+    color: blue;
+}
+
+table {
+    border: solid 1px #000;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #EEE;
+    border: solid 1px #999;
+    padding: 4px;
+}
+
+td {
+    border: solid 1px #EEE;
+    padding: 4px;
+}
+
+
+
+
