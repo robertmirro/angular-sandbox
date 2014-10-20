@@ -2,7 +2,7 @@
     'use strict';
 
     // define controller function seperately
-    function PeopleController( $scope , PeopleFactory , AppValueSettings ) {
+    function PeopleController( $scope , $log , PeopleFactory , AppValueSettings ) {
 
         // set defaults
         $scope.sortBy = 'name';
@@ -15,7 +15,8 @@
                 $scope.people = data;
             })
             .error( function( data , status , headers , config ) {
-                console.log( 'ERROR: getPeople()' );
+                // angular way to write to console.log
+                $log.log( 'ERROR: ' + data.error + ' ' + status );
             });
 
 //        $scope.people = PeopleFactory.getPeople();
@@ -31,6 +32,6 @@
     // reference app using angular.module( appname ), bind controller
     // use array param to allow dependency injection with minification
     angular.module( 'peopleApp' )
-        .controller( 'PeopleController' , [ '$scope' , 'PeopleFactory' , 'AppValueSettings' , PeopleController ] );
+        .controller( 'PeopleController' , [ '$scope' , '$log' , 'PeopleFactory' , 'AppValueSettings' , PeopleController ] );
     
 })();

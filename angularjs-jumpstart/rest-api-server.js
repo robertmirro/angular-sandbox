@@ -5,7 +5,7 @@ var express = require('express') ,
 
 dateFormat.masks.atDayTime = 'dddd, mm/dd/yyyy "at" h:MM:ss TT';
 
-app.set( 'json spaces' , 4 );  // pretty print
+app.set( 'json spaces' , 4 );  // (1) pretty print
 //app.set( 'json replace' , replacerFunction );  // pretty print
 
 app.use( function( request , response , next ) {
@@ -20,8 +20,14 @@ app.use( '/' , express.static( __dirname ) );
 
 app.get('/people', function(req, res) {
     console.log( 'people...' );
+    
+    // uncomment to test error handling
+    //res.json( 500 , { error : 'An error has occurred!' } ) ;
+    
+    // comment to test error handling
     res.json(people);
-//    res.end( JSON.stringify( people , null , '    ' ) );  // pretty print
+    
+    //res.end( JSON.stringify( people , null , '    ' ) );  // (2) pretty print
 });
 
 app.get('/person/:id', function( req , res ) {
