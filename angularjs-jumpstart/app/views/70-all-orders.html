@@ -1,0 +1,19 @@
+<h2>People Orders</h2>
+<br />
+<!-- use .product property to ensure filter ONLY filters using product otherwise all object properties are included in filter -->
+Filter by product: <input type="text" data-ng-model="orderFilter.product" />
+<br /><br />
+<table class="table table-striped">
+    <tr>
+        <th>Product</th>
+        <th>Total</th>
+    </tr>
+    <tr data-ng-repeat="order in orders | filter:orderFilter | orderBy:'product'">
+        <td>{{ order.product }}</td>
+        <td>{{ order.total | currency }}</td>
+    </tr>
+    <tr data-ng-class="totalType">
+        <td>&nbsp;</td>
+        <td>{{ ordersTotal | currency }}</td>
+    </tr>
+</table>

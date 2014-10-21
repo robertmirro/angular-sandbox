@@ -1,11 +1,12 @@
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
-  
+
+
 .red {
     color : red;
 }
-
+/*
 .blue {
     color: blue;
 }
@@ -32,7 +33,7 @@ footer {
     font-style: italic;
     background-color: #EEE;
 }
-
+*/
 
 
 

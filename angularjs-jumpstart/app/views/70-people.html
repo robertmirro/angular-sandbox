@@ -1,0 +1,36 @@
+<h2>{{ appSettings.title }}</h2>
+
+<div>
+    <!-- use .name property to ensure filter ONLY filters using name otherwise all object properties are included in filter -->
+    Filter by name: <input type="text" data-ng-model="nameText.name" class="" />
+    <br /><br />
+
+    <ul style="display:none;">
+        <li data-ng-repeat="person in people | filter:nameText | orderBy:'name'">{{ person.name }} ({{ person.city | uppercase }}) {{ person.rate | currency }} - {{ person.joined | date }}</li>
+    </ul>
+</div>
+
+<table class="table table-striped">
+    <tr>
+        <th data-ng-click="sortColumn('name')">Name</th>
+        <th data-ng-click="sortColumn('city')">City</th>
+        <th data-ng-click="sortColumn('rate')">Rate</th>
+        <th data-ng-click="sortColumn('joined')">Joined</th>
+        <th data-ng-click="sortColumn('orderTotal')">Order Total</th>
+        <th>Orders</th>
+        <th>&nbsp;</th>
+    </tr>
+    <tr class="" data-ng-repeat="person in people | orderBy:sortBy:reverse">
+        <td>{{ person.name }}</td>
+        <td>{{ person.city }}</td>
+        <td>{{ person.rate | currency:'USD: $' }}</td>
+        <!-- NEED outer DOUBLE quotes and inner SINGLE quotes to include string literals in formats -->
+        <td>{{ person.joined | date:"EEEE, MMMM d, y 'at' h:mm:ss a" }}</td>
+        <td>{{ person.orderTotal | currency }}</td>
+        <td><a href="#/orders/{{ person.id }}" class="btn btn-default btn-sm">View</a></td>
+        <td class="center"><span class="glyphicon glyphicon-remove delete red" ng-click="deletePerson( person.id )"></span></td>
+    </tr>
+</table>
+<br />
+<span>Total people: {{ people.length }}</span>
+<footer>Verison {{ appSettings.version }}</footer>

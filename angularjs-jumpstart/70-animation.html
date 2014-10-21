@@ -1,0 +1,30 @@
+<!doctype html>
+<html data-ng-app="peopleApp">
+    <head>
+        <title>factory</title>
+        <link rel="stylesheet" href="scripts/angular-styles.css" />
+        <link rel="stylesheet" href="scripts/bootstrap.min.css" />
+    </head>
+    <body data-ng-cloak>
+        <header>
+            <nav class="navbar navbar-default">
+                <ul class="nav navbar-nav">
+                    <li><a href='#/people'>People</a></li>
+                    <li><a href='#/orders'>Orders</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Use Brackets live preview to run app because routing doesnt work with file:// -->
+        <div data-ng-view></div>
+                
+        <script src="scripts/angular.js"></script>
+        <script src="scripts/angular-route.js"></script>
+        <script src="app/modules/70-peopleApp.js"></script>
+        <script src="app/services/70-appSettings.js"></script>
+        <script src="app/services/70-peopleFactory.js"></script>    
+        <script src="app/controllers/70-peopleController.js"></script>
+        <script src="app/controllers/70-ordersController.js"></script>
+        <script src="app/controllers/70-allOrdersController.js"></script>
+    </body>
+</html>
