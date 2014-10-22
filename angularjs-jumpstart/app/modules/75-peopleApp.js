@@ -22,7 +22,7 @@
                 })
                 .when( '/orders' , {
                     controller : 'AllOrdersController' , 
-                    templateUrl : 'app/views/70-all-orders.html'
+                    templateUrl : 'app/views/75-all-orders.html'
                 })
                 .otherwise( {
                     redirectTo : '/'

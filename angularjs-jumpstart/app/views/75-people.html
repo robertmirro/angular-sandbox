@@ -20,7 +20,7 @@
         <th>Orders</th>
         <th>&nbsp;</th>
     </tr>
-    <tr data-ng-repeat="person in people | filter:nameText | orderBy:sortBy:reverse">
+    <tr data-ng-repeat="person in people | filter:nameText | orderBy:sortBy:reverse" class="repeat-animation">
         <td>{{ person.name }}</td>
         <td>{{ person.city }}</td>
         <td>{{ person.rate | currency:'USD: $' }}</td>

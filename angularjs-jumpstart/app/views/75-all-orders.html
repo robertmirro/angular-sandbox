@@ -8,7 +8,7 @@ Filter by product: <input type="text" data-ng-model="orderFilter.product" />
         <th>Product</th>
         <th>Total</th>
     </tr>
-    <tr data-ng-repeat="order in orders | filter:orderFilter | orderBy:'product'">
+    <tr data-ng-repeat="order in orders | filter:orderFilter | orderBy:'product'" class="repeat-animation">
         <td>{{ order.product }}</td>
         <td>{{ order.total | currency }}</td>
     </tr>
