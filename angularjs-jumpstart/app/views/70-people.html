@@ -5,8 +5,8 @@
     Filter by name: <input type="text" data-ng-model="nameText.name" class="" />
     <br /><br />
 
-    <ul style="display:none;">
-        <li data-ng-repeat="person in people | filter:nameText | orderBy:'name'">{{ person.name }} ({{ person.city | uppercase }}) {{ person.rate | currency }} - {{ person.joined | date }}</li>
+    <ul style="display:none;" class="list-group">
+        <li class="list-group-item" data-ng-repeat="person in people | filter:nameText | orderBy:'name'">{{ person.name }} ({{ person.city | uppercase }}) {{ person.rate | currency }} - {{ person.joined | date }}</li>
     </ul>
 </div>
 
@@ -20,7 +20,7 @@
         <th>Orders</th>
         <th>&nbsp;</th>
     </tr>
-    <tr class="" data-ng-repeat="person in people | orderBy:sortBy:reverse">
+    <tr data-ng-repeat="person in people | filter:nameText | orderBy:sortBy:reverse">
         <td>{{ person.name }}</td>
         <td>{{ person.city }}</td>
         <td>{{ person.rate | currency:'USD: $' }}</td>
