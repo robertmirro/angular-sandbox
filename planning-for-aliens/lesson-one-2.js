@@ -6,11 +6,11 @@
     console.log( app );
 
     app.controller( 'world' , function( $scope ) {
-        //$scope.text = 'World';
+        $scope.oldText = 'Old World';
+        $scope.w.anotherValue = 'another value';
         this.text = 'World';
         this.otherText = 'Other World';
         console.log( $scope );
-//        console.log( this );
     });
 
 })();
