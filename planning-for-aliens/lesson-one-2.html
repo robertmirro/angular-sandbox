@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body ng-app="hello">
+
+        <div ng-controller="world as w">
+            <input ng-model="w.text" />
+            <p>
+                Hello {{ w.text }}!
+                <br>
+                Goodbye {{ w.otherText }}
+            </p>
+        </div>
+
+        <script src="angular.min.js"></script>
+        <script src="lesson-one-2.js"></script>
+    </body>
+</html>
