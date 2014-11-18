@@ -1,8 +1,9 @@
 (function () {
     var app = angular.module( 'store' , [] );
 
-    app.controller( 'StoreController' , function() {
+    app.controller( 'StoreController' , function( $scope ) {
         this.products = gems;
+        console.log( '$scope:' , $scope );
     });
 
     var gems = [ 
