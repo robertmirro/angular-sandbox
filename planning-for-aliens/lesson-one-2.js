@@ -12,7 +12,8 @@
         this.otherText = 'Other World';
         console.log( $scope );
         console.log( $rootScope );
-        console.log( '$scope.$parent.$root === $rootScope:' , $scope.$parent.$root === $rootScope );
+        console.log( '$scope.$parent.$root === $rootScope:' , $scope.$parent.$root === $rootScope );  // true
+        console.log( '$scope.__proto__ === $rootScope:' , $scope.__proto__ === $rootScope );  // true
     });
 
 })();
