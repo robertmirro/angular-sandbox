@@ -6,12 +6,17 @@
     function Scope() {
         this.$$watchers = [];
     }
+    
+    // use function reference pointer as initial watcher value because its guaranteed to be unique (only equal to itself)
+    // this ensures each watcher listener is ALWAYS invoked on initial $digest() 
+    function initialValue() {}
 
     Scope.prototype.$watch = function( fnWatch , fnListener ) {
         this.$$watchers.push(
             {
                 'fnWatch' : fnWatch ,
-                'fnListener' : fnListener
+                'fnListener' : fnListener , 
+                'previousValue' : initialValue
             }
         );
     };

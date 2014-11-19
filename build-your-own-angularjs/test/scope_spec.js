@@ -84,6 +84,22 @@
                 
                 //console.dir( scope );
             });
+
+            it( 'call watch listener when watch value is initially an undefined value' , function() {
+                scope.changeCount = 0;
+
+                var fnWatch = function( scope ){
+                    return scope.theValue;
+                };
+                var fnListener = function( newValue , oldValue , scope ){
+                    console.log( 'fnListener: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    scope.changeCount++;
+                };
+                scope.$watch( fnWatch , fnListener );
+                
+                scope.$digest();
+                expect( scope.changeCount ).to.equal( 1 );  // counter incremented on initial digest()
+            });
             
         });
 
