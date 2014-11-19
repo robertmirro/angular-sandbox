@@ -17,8 +17,10 @@
     };
     
     Scope.prototype.$digest = function() {
+        var scope = this;
         [].forEach.call( this.$$watchers , function( watcher ) { 
-            watcher.fnListener(); 
+            watcher.fnWatch( scope );  // test #2
+            watcher.fnListener();  // test #1
         });
     };
     
