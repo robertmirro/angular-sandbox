@@ -51,6 +51,39 @@
                 expect( fnWatch ).to.have.been.calledWith( scope ); // test #2
             });
 
+            it( 'call watch listener when watch value changes' , function() {
+                scope.theValue = 'robert';
+                scope.changeCount = 0;
+
+                var fnWatch = function( scope ){
+                    return scope.theValue;
+                };
+                var fnListener = function( newValue , oldValue , scope ){
+                    scope.changeCount++;
+                };
+                scope.$watch( fnWatch , fnListener );
+                
+                console.dir( scope );
+                
+                expect( scope.changeCount ).to.equal( 0 );
+                
+                scope.$digest();
+                expect( scope.changeCount ).to.equal( 1 );  // counter incremented on initial digest()
+
+                console.dir( scope );
+                
+                scope.$digest();
+                expect( scope.changeCount ).to.equal( 1 );
+
+                scope.theValue = 'bob';
+                expect( scope.changeCount ).to.equal( 1 );
+
+                scope.$digest();
+                expect( scope.changeCount ).to.equal( 2 );  // counter incremented on next digest() after change of theValue
+                
+                console.dir( scope );
+            });
+            
         });
 
     });
