@@ -59,18 +59,19 @@
                     return scope.theValue;
                 };
                 var fnListener = function( newValue , oldValue , scope ){
+                    //console.log( 'fnListener: newValue: %s , oldValue: %s' , newValue , oldValue );
                     scope.changeCount++;
                 };
                 scope.$watch( fnWatch , fnListener );
                 
-                console.dir( scope );
+                //console.dir( scope );
                 
                 expect( scope.changeCount ).to.equal( 0 );
                 
                 scope.$digest();
                 expect( scope.changeCount ).to.equal( 1 );  // counter incremented on initial digest()
 
-                console.dir( scope );
+                //console.dir( scope );
                 
                 scope.$digest();
                 expect( scope.changeCount ).to.equal( 1 );
@@ -81,7 +82,7 @@
                 scope.$digest();
                 expect( scope.changeCount ).to.equal( 2 );  // counter incremented on next digest() after change of theValue
                 
-                console.dir( scope );
+                //console.dir( scope );
             });
             
         });
