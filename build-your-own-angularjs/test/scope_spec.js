@@ -2,7 +2,8 @@
     'use strict';
     
     var expect = require('chai').expect ,
-        util = require('util') ;
+        util = require('util') ,
+        Scope = require('../app/scope');
 
 
     describe( 'Scope' , function() {
