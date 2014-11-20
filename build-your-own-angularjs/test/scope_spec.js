@@ -31,7 +31,7 @@
             it( 'call watch listener of first $digest' , function() {
                 var fnWatch = function() {
                     //console.log( 'fnWatch args:' , arguments );
-                    return 'watch function';
+                    return 'watch function return value';
                 };
                 var fnListener = sinon.spy();
                 
@@ -92,7 +92,7 @@
                     return scope.theValue;
                 };
                 var fnListener = function( newValue , oldValue , scope ){
-                    console.log( 'fnListener: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    //console.log( 'fnListener: newValue: %s , oldValue: %s' , newValue , oldValue );
                     scope.changeCount++;
                 };
                 scope.$watch( fnWatch , fnListener );
@@ -111,7 +111,7 @@
                     return scope.theValue;
                 };
                 var fnListener = function( newValue , oldValue , scope ){
-                    console.log( 'fnListener: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    //console.log( 'fnListener: newValue: %s , oldValue: %s' , newValue , oldValue );
                     scope.changeCount++;
                     oldValueParamValue = oldValue;
                 };
@@ -119,6 +119,15 @@
                 
                 scope.$digest();
                 expect( oldValueParamValue ).to.equal( 4848 );  // oldValue returned as newValue on initial $digest()
+            });
+
+            it( 'watch that omits listener' , function() {
+                // watch is returing a value below but in reality, a watch with an omitted listener should return no value (undefined)
+                var fnWatch = sinon.spy( function() { return 'some unimportant value'; }  );
+                scope.$watch( fnWatch );
+                
+                scope.$digest();
+                expect( fnWatch ).to.have.been.called; 
             });
             
         });

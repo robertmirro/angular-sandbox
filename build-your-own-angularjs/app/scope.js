@@ -10,12 +10,15 @@
     // use function reference pointer as initial watcher value because its guaranteed to be unique (only equal to itself)
     // this ensures each watcher listener is ALWAYS invoked on initial $digest() 
     function initialValue() {}
+    
+    // handle watch that omits listener
+    function noop() {}
 
     Scope.prototype.$watch = function( fnWatch , fnListener ) {
         this.$$watchers.push(
             {
                 'fnWatch' : fnWatch ,
-                'fnListener' : fnListener , 
+                'fnListener' : fnListener || noop , 
                 'previousValue' : initialValue
             }
         );
@@ -27,6 +30,7 @@
         
         [].forEach.call( this.$$watchers , function( watcher ) { 
             currentValue = watcher.fnWatch( scope );  // test #2
+            console.log( 'currentValue:', currentValue );
             if ( currentValue !== watcher.previousValue ) {
                 watcher.fnListener( 
                     currentValue , 
