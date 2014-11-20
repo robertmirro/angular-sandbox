@@ -28,7 +28,11 @@
         [].forEach.call( this.$$watchers , function( watcher ) { 
             currentValue = watcher.fnWatch( scope );  // test #2
             if ( currentValue !== watcher.previousValue ) {
-                watcher.fnListener( currentValue , watcher.previousValue , scope );  // test #1
+                watcher.fnListener( 
+                    currentValue , 
+                    watcher.previousValue === initialValue ? currentValue : watcher.previousValue , // dont leak value of initialValue on initial $digest(), instead return newValue as oldValue
+                    scope 
+                );  // test #1
                 watcher.previousValue = currentValue;
             }
         });

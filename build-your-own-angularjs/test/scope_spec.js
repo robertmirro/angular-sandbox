@@ -100,6 +100,26 @@
                 scope.$digest();
                 expect( scope.changeCount ).to.equal( 1 );  // counter incremented on initial digest()
             });
+
+            it( 'call watch listener with newValue as oldValue when watch value is initially an undefined value' , function() {
+                scope.theValue = 4848;
+                scope.changeCount = 0;
+                
+                var oldValueParamValue;
+
+                var fnWatch = function( scope ){
+                    return scope.theValue;
+                };
+                var fnListener = function( newValue , oldValue , scope ){
+                    console.log( 'fnListener: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    scope.changeCount++;
+                    oldValueParamValue = oldValue;
+                };
+                scope.$watch( fnWatch , fnListener );
+                
+                scope.$digest();
+                expect( oldValueParamValue ).to.equal( 4848 );  // oldValue returned as newValue on initial $digest()
+            });
             
         });
 
