@@ -74,10 +74,10 @@
                 //console.dir( scope );
                 
                 scope.$digest();
-                expect( scope.changeCount ).to.equal( 1 );
+                expect( scope.changeCount ).to.equal( 1 );  // no value change, count remains the same
 
                 scope.theValue = 'bob';
-                expect( scope.changeCount ).to.equal( 1 );
+                expect( scope.changeCount ).to.equal( 1 );  // value changed, $digest() not invoked, count remains the same
 
                 scope.$digest();
                 expect( scope.changeCount ).to.equal( 2 );  // counter incremented on next digest() after change of theValue
@@ -98,7 +98,7 @@
                 scope.$watch( fnWatch , fnListener );
                 
                 scope.$digest();
-                expect( scope.changeCount ).to.equal( 1 );  // counter incremented on initial digest()
+                expect( scope.changeCount ).to.equal( 1 );  // no value or value change, counter incremented on initial digest()
             });
 
             it( 'call watch listener with newValue as oldValue when watch value is initially an undefined value' , function() {
@@ -122,12 +122,48 @@
             });
 
             it( 'watch that omits listener' , function() {
-                // watch is returing a value below but in reality, a watch with an omitted listener should return no value (undefined)
+                // watch is returing a value below, but in reality, a watch with an omitted listener should return no value (undefined)
                 var fnWatch = sinon.spy( function() { return 'some unimportant value'; }  );
                 scope.$watch( fnWatch );
                 
                 scope.$digest();
                 expect( fnWatch ).to.have.been.called; 
+            });
+
+            it( 'listener triggers chained watcher during digest' , function() {
+                scope.name = 'Robert';
+
+                // order of watchers is deliberate
+                // dependent nameUpper watcher is intentionally first because otherwise test would pass as a result of watcher registration order
+                var fnWatchNameUpper = function( scope ){
+                    return scope.nameUpper;
+                };
+                var fnListenerNameUpper = function( newValue , oldValue , scope ){
+                    //console.log( 'fnListenerNameUpper: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    if ( newValue ) {
+                        scope.initial = newValue.substring( 0 , 1 ) + '.';
+                    }
+                };
+                scope.$watch( fnWatchNameUpper , fnListenerNameUpper );
+
+                var fnWatchName = function( scope ){
+                    return scope.name;
+                };
+                var fnListenerName = function( newValue , oldValue , scope ){
+                    //console.log( 'fnListenerName: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    if ( newValue ) {
+                        scope.nameUpper = newValue.toUpperCase();
+                    }
+                };
+                scope.$watch( fnWatchName , fnListenerName );
+                
+                scope.$digest();
+                expect( scope.initial ).to.equal( 'R.' ); 
+
+                scope.name = 'Bob';
+                scope.$digest();
+                expect( scope.initial ).to.equal( 'B.' ); 
+
             });
             
         });
