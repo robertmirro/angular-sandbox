@@ -4,6 +4,11 @@
     module.exports = Scope;
         
     function Scope() {
+        // instantiate Scope with or without new
+        if ( !( this instanceof Scope ) ) {
+            return new ( Scope.bind.apply( Scope , [ null ].concat( [].slice.call( arguments ) ) ) );
+        }
+        
         this.$$watchers = [];
     }
     
@@ -28,9 +33,10 @@
         var scope = this;
         var currentValue;
         
-        [].forEach.call( this.$$watchers , function( watcher ) { 
+        //[].forEach.call( this.$$watchers , function( watcher ) { 
+        this.$$watchers.forEach( function( watcher ) {
             currentValue = watcher.fnWatch( scope );  // test #2
-            console.log( 'currentValue:', currentValue );
+            //console.log( 'currentValue:', currentValue );
             if ( currentValue !== watcher.previousValue ) {
                 watcher.fnListener( 
                     currentValue , 
