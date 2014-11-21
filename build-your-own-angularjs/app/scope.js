@@ -39,16 +39,15 @@
             currentValue;
         
         //[].forEach.call( this.$$watches , function( watch ) { 
-        //this.$$watches.forEach( function( watch ) {  // switch to for loop, cannot easily break forEach without try/catch hack
+        //this.$$watches.forEach( function( watch ) {  // switch to for loop, cannot easily break native forEach without try/catch hack
         for ( ; watchIndex < watchesLength; watchIndex++ ) {
             watch = scope.$$watches[ watchIndex ];
             currentValue = watch.fnWatch( scope );  // test #2
-            
             //console.log( 'currentValue:', currentValue );
+
             if ( currentValue !== watch.previousValue ) {
                 digestWasDirty = true;
                 scope.$$lastDirtyWatch = watch;
-                //console.log('digestWasDirty:' , digestWasDirty);
                 
                 watch.fnListener( 
                     currentValue , 
@@ -57,7 +56,7 @@
                 );  // test #1
                 watch.previousValue = currentValue;
             } else if ( watch === scope.$$lastDirtyWatch ) {
-                break;  // short-circuit
+                break;  // short-circuit if this clean watch was last known dirty watch
             }
         };
         
