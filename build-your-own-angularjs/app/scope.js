@@ -2,8 +2,6 @@
     'use strict';
     
     var _ = require('lodash');
-    
-    console.log( 'new scope...' , _.VERSION );
         
     module.exports = Scope;
     
@@ -46,18 +44,9 @@
     Scope.prototype.$$digestOnce = function() {
         var scope = this ,
             digestWasDirty = false ,
-//            watchIndex = 0 ,
-//            watchesLength = scope.$$watches.length ,
-//            watch ,
             currentValue;
         
-        //[].forEach.call( this.$$watches , function( watch ) { 
-        //this.$$watches.forEach( function( watch ) {  
-        // switch to for loop, cannot easily break native forEach without try/catch hack
-        //for ( ; watchIndex < watchesLength; watchIndex++ ) {
-        // using lodash now, convert to forEach
         _.forEach( scope.$$watches , function( watch ) {
-//            watch = scope.$$watches[ watchIndex ];
             currentValue = watch.fnWatch( scope );  // test #2
             //console.log( 'currentValue:', currentValue );
 
@@ -72,7 +61,6 @@
                 );  // test #1
                 watch.previousValue = watch.valueBasedEquality ? _.cloneDeep( currentValue ) : currentValue;
             } else if ( watch === scope.$$lastDirtyWatch ) {
-                //break;  // short-circuit if this clean watch was last known dirty watch
                 return false;  // short-circuit forEach if this clean watch was last known dirty watch
             }
         });

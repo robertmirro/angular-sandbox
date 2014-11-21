@@ -101,7 +101,7 @@
                 expect( scope.changeCount ).to.equal( 1 );  // no value or value change, counter incremented on initial digest()
             });
 
-            it( 'call watch listener with newValue as oldValue when watch value is initially an undefined value' , function() {
+            it( 'call watch listener with newValue as oldValue on initial invocation' , function() {
                 scope.theValue = 4848;
                 scope.changeCount = 0;
                 
