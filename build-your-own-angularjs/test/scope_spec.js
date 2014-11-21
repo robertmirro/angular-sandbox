@@ -9,7 +9,7 @@
         Scope = require('../app/scope');
     
     chai.use( sinonChai );
-
+    
     describe( 'Scope' , function() {
 
         describe( 'scope as object' , function() {
@@ -240,6 +240,29 @@
                 
                 scope.$digest();
                 expect( theCount ).to.equal( 1 );
+            });
+            
+            it( 'compare via value-based dirty checking on reference type' , function() {
+                scope.theValue = [ 1 , 2 , 3 , 4 ];
+                
+                var theCount = 0;
+
+                scope.$watch(
+                    function( scope ) {
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ) {
+                        theCount++;
+                    } ,
+                    true  // invoke value-based dirty checking on reference type
+                );
+                
+                scope.$digest();
+                expect( theCount ).to.equal( 1 );
+
+                scope.theValue.push( 88 );
+                scope.$digest();
+                expect( theCount ).to.equal( 2 );
             });
             
         });
