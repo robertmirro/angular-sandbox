@@ -56,13 +56,12 @@
     
     Scope.prototype.$digest = function() {
         var digestTTL = 10 ,  // Time To Live  
-            digestCount = 0;
+            digestTTLCount = digestTTL;
         
         // handle when listeners trigger chained watchers in same $digest()
         // invoke $digest() repeatedly until its no longer dirty
-        while ( digestCount++ , this.$$digestOnce() ) {
-            //console.log( 'digestCount:' , digestCount );
-            if ( digestCount >= digestTTL ) {
+        while ( this.$$digestOnce() ) {
+            if ( !( digestTTLCount-- ) ) {
                 throw new Error( 'Digest TTL (' + digestTTL + ') has been exceeded.' );
             }
         }
