@@ -130,11 +130,11 @@
                 expect( fnWatch ).to.have.been.called; 
             });
 
-            it( 'listener triggers chained watcher during digest' , function() {
+            it( 'listener triggers chained watch during digest' , function() {
                 scope.name = 'Robert';
 
-                // order of watchers is deliberate
-                // dependent nameUpper watcher is intentionally first because otherwise test would pass as a result of watcher registration order
+                // order of watchs is deliberate
+                // dependent nameUpper watch is intentionally first because otherwise test would pass as a result of watch registration order
                 var fnWatchNameUpper = function( scope ){
                     return scope.nameUpper;
                 };
@@ -165,7 +165,7 @@
                 expect( scope.initial ).to.equal( 'B.' ); 
             });
             
-            it( 'abandon digest if chained watchers exceed (x) TTL iterations' , function() {
+            it( 'abandon digest if chained watches exceed (x) TTL iterations' , function() {
                 scope.countOne = 0;
                 scope.countTwo = 0;
 
@@ -188,6 +188,33 @@
                 scope.$watch( fnWatchCountTwo , fnListenerCountTwo );
                 
                 expect( function(){ scope.$digest(); } ).to.throw( Error );
+            });
+
+            it( 'short-circuit digest when last dirty watch is clean' , function() {
+                var numberOfWatches = 100 , 
+                    watchesInspected;
+                
+                scope.watchArray = Array.apply( null , new Array( numberOfWatches ) ).map( function( e , i ){ return ++i; } );
+                
+                scope.watchArray.forEach( function( e , i ) {
+                    scope.$watch(
+                        function( scope ) {
+                            watchesInspected++;
+                            return scope.watchArray[ i ]; 
+                        } , 
+                        function( newValue , oldValue , scope ) {
+                        }
+                    );
+                });
+                
+                watchesInspected = 0;
+                scope.$digest();
+                expect( watchesInspected ).to.equal( numberOfWatches * 2 ); // all watches dirty, must invoke full $digest() twice
+                
+                watchesInspected = 0;
+                scope.watchArray[ 0 ] = 4848;
+                scope.$digest();
+                expect( watchesInspected ).to.equal( numberOfWatches + 1 );  // only init watch dirty, invoke full $digest() once, short-circuit on next iteration of clean init watch
             });
             
         });
