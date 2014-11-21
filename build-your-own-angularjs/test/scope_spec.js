@@ -216,6 +216,31 @@
                 scope.$digest();
                 expect( watchesInspected ).to.equal( numberOfWatches + 1 );  // only init watch dirty, invoke full $digest() once, short-circuit on next iteration of clean init watch
             });
+
+            it( 'reset digest short-circuit when dirty watch listener adds new watch' , function() {
+                scope.theValue = 'robert';
+                
+                var theCount = 0;
+
+                scope.$watch(
+                    function( scope ) {
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ) {
+                        scope.$watch(
+                            function( scope ) {
+                                return scope.theValue; 
+                            } , 
+                            function( newValue , oldValue , scope ) {
+                                theCount++;
+                            }
+                        );
+                    }
+                );
+                
+                scope.$digest();
+                expect( theCount ).to.equal( 1 );
+            });
             
         });
 

@@ -28,6 +28,7 @@
                 'previousValue' : initialValue
             }
         );
+        this.$$lastDirtyWatch = null;  // reset in order to accomodate watch added via dirty watch listener
     };
     
     Scope.prototype.$$digestOnce = function() {
