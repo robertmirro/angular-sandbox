@@ -163,7 +163,31 @@
                 scope.name = 'Bob';
                 scope.$digest();
                 expect( scope.initial ).to.equal( 'B.' ); 
+            });
+            
+            it( 'abandon digest if chained watchers exceed (x) TTL iterations' , function() {
+                scope.countOne = 0;
+                scope.countTwo = 0;
 
+                var fnWatchCountOne = function( scope ){
+                    return scope.countOne;
+                };
+                var fnListenerCountOne = function( newValue , oldValue , scope ){
+                    //console.log( 'fnListenerCountOne: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    scope.countTwo++;
+                };
+                scope.$watch( fnWatchCountOne , fnListenerCountOne );
+
+                var fnWatchCountTwo = function( scope ){
+                    return scope.countTwo;
+                };
+                var fnListenerCountTwo = function( newValue , oldValue , scope ){
+                    //console.log( 'fnListenerCountTwo: newValue: %s , oldValue: %s' , newValue , oldValue );
+                    scope.countOne++;
+                };
+                scope.$watch( fnWatchCountTwo , fnListenerCountTwo );
+                
+                expect( function(){ scope.$digest(); } ).to.throw( Error );
             });
             
         });
