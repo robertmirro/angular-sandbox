@@ -38,7 +38,13 @@
         //if ( valueBasedEquality ) {
         //    console.log( '$$areEqual:' , newValue , '-' , oldValue , '-' , _.isEqual( newValue , oldValue ) );
         //}
-        return valueBasedEquality ? _.isEqual( newValue , oldValue ) : newValue === oldValue ;
+        
+        // isEqual() handles NaN properly, otherwise need to manually handle it
+        return valueBasedEquality 
+            ? _.isEqual( newValue , oldValue ) 
+            : newValue === oldValue || (
+                typeof newValue === 'number' && typeof oldValue === 'number' && isNaN( newValue ) && isNaN( oldValue )
+                );
     };
     
     Scope.prototype.$$digestOnce = function() {

@@ -264,6 +264,28 @@
                 scope.$digest();
                 expect( theCount ).to.equal( 2 );
             });
+
+            it( 'handle NaN equality issue' , function() {
+                scope.theValue = 0 / 0;  // NaN
+                
+                var theCount = 0;
+
+                scope.$watch(
+                    function( scope ) {
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ) {
+                        theCount++;
+                    }
+                );
+                
+                scope.$digest();
+                expect( theCount ).to.equal( 1 );
+
+                scope.$digest();
+                expect( theCount ).to.equal( 1 );
+
+            });
             
         });
 
