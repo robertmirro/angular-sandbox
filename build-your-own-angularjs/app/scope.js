@@ -88,5 +88,11 @@
             }
         }
     };
+
+    Scope.prototype.$eval = function( cb , arg ) {
+        var scope = this;
+        
+        return cb( scope , arg );
+    };
     
 })();

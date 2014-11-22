@@ -286,6 +286,26 @@
                 expect( theCount ).to.equal( 1 );
 
             });
+
+            it( 'execute $eval function, return result' , function() {
+                scope.theValue = 4;
+                
+                var returnValue = scope.$eval( function( scope ) {
+                    return scope.theValue;
+                });
+                
+                expect( returnValue ).to.equal( 4 );
+            });
+
+            it( 'pass through param/value sent to $eval' , function() {
+                scope.theValue = 44;
+                
+                var returnValue = scope.$eval( function( scope , arg ) {
+                    return scope.theValue + arg;
+                } , 4 );
+                
+                expect( returnValue ).to.equal( 48 );
+            });
             
         });
 
