@@ -306,6 +306,30 @@
                 
                 expect( returnValue ).to.equal( 48 );
             });
+
+            it( 'execute $apply function, invoke digest cycle' , function() {
+                scope.theValue = 'robert';
+                
+                var theCount = 0;
+
+                scope.$watch(
+                    function( scope ) {
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ) {
+                        theCount++;
+                    }
+                );
+                
+                scope.$digest();
+                expect( theCount ).to.equal( 1 );
+                
+                scope.$apply( function( scope ) {
+                    scope.theValue = 'bob';
+                });
+                                                
+                expect( theCount ).to.equal( 2 );
+            });
             
         });
 

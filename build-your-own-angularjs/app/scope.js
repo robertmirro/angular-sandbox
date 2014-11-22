@@ -94,5 +94,15 @@
         
         return cb( scope , arg );
     };
+
+    Scope.prototype.$apply = function( cb , arg ) {
+        var scope = this;
+        
+        try {
+            return scope.$eval( cb , arg );
+        } finally {
+            scope.$digest();
+        }
+    };
     
 })();
