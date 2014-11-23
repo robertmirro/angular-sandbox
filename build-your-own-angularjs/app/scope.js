@@ -120,6 +120,15 @@
     Scope.prototype.$evalAsync = function( cb , arg ) {
         var scope = this;
 
+        // schedule a $digest cycle if: 
+        //  (1) there is no currently active $digest
+        //  (2) this is the first evalAsync task being queued
+        if ( scope.$$phase === null && !scope.$$asyncQueue.length ) {
+            setTimeout( function() {
+                scope.$digest();
+            } , 0 );
+        }
+        
         scope.$$asyncQueue.push(
             {
                 'scope' : scope ,

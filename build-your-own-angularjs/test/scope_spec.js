@@ -414,7 +414,30 @@
                 expect( scope.phaseInListenerFn ).to.equal( '$digest' );
                 expect( scope.phaseInApplyFn ).to.equal( '$apply' );
             });
-            
+
+            it( '$evalAsync schedules a digest cycle if no current $digest' , function( done ) {
+                scope.theValue = 'robert';
+                
+                var theCount = 0;
+
+                scope.$watch(
+                    function( scope ) {
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ) {
+                        theCount++;
+                    }
+                );
+                
+                scope.$evalAsync( function( scope ) {});
+                
+                expect( theCount ).to.equal( 0 );
+                
+                setTimeout( function() {
+                    expect( theCount ).to.equal( 1 );
+                    done();
+                } , 100 );
+            });
             
         });
 
