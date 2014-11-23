@@ -88,7 +88,8 @@
         
         // handle when listeners trigger chained watches in same $digest()
         // invoke $digest() repeatedly until its no longer dirty
-        while ( processAsyncQueue( scope ) , scope.$$digestOnce() ) {
+        // continue while loop while (1) previous digest was dirty OR (2) while asyncQueue needs to be processed (as a result of $evalAsync invoked from a watch)
+        while ( processAsyncQueue( scope ) , ( scope.$$digestOnce() || scope.$$asyncQueue.length ) ) {
             if ( !( digestTTLCount-- ) ) {
                 throw new Error( 'Digest TTL (' + digestTTL + ') has been exceeded.' );
             }

@@ -352,6 +352,28 @@
                 expect( scope.asyncEvaluated ).to.equal( true );
                 expect( scope.asyncEvaluatedImmediately ).to.equal( false );
             });
+
+            it( 'execute $evalAsync functions added via watch functions' , function() {
+                scope.theValue = 'robert';
+                scope.asyncEvaluatedCount = 0;
+
+                scope.$watch(
+                    function( scope ) {
+                        // $evalAsync is added twice but $digest() is only called twice, not the necessary 3 times
+                        // asyncQueue is only procesed twice (once before first $evalAsync and once before second $evalAsync)
+                        if ( scope.asyncEvaluatedCount < 2 ) {
+                            scope.$evalAsync( function( scope ) {
+                                scope.asyncEvaluatedCount++;
+                            });
+                        }
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ){}
+                );
+                
+                scope.$digest();
+                expect( scope.asyncEvaluatedCount ).to.equal( 2 );
+            });
             
         });
 
