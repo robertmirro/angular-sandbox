@@ -330,6 +330,28 @@
                                                 
                 expect( theCount ).to.equal( 2 );
             });
+
+            it( 'execute $evalAsync function later in same digest cycle' , function() {
+                scope.theValue = 'robert';
+                scope.asyncEvaluated = false;
+                scope.asyncEvaluatedImmediately = false;
+
+                scope.$watch(
+                    function( scope ) {
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ) {
+                        scope.$evalAsync( function( scope ) {
+                            scope.asyncEvaluated = true;
+                        });
+                        scope.asyncEvaluatedImmediately = scope.asyncEvaluated;
+                    }
+                );
+                
+                scope.$digest();
+                expect( scope.asyncEvaluated ).to.equal( true );
+                expect( scope.asyncEvaluatedImmediately ).to.equal( false );
+            });
             
         });
 

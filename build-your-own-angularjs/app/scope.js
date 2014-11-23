@@ -13,17 +13,22 @@
     function noop(){}
         
     function Scope() {
+        var scope = this; 
+        
         // instantiate Scope with or without new
-        if ( !( this instanceof Scope ) ) {
+        if ( !( scope instanceof Scope ) ) {
             return new ( Scope.bind.apply( Scope , [ null ].concat( [].slice.call( arguments ) ) ) );
         }
         
-        this.$$watches = [];
-        this.$$lastDirtyWatch = null;
+        scope.$$watches = [];
+        scope.$$lastDirtyWatch = null;
+        scope.$$asyncQueue = [];
     }
 
     Scope.prototype.$watch = function( fnWatch , fnListener , valueBasedEquality ) {
-        this.$$watches.push(
+        var scope = this; 
+        
+        scope.$$watches.push(
             {
                 'fnWatch' : fnWatch ,
                 'fnListener' : fnListener || noop , 
@@ -31,7 +36,7 @@
                 'previousValue' : initialValue
             }
         );
-        this.$$lastDirtyWatch = null;  // reset in order to accomodate watch added via dirty watch listener
+        scope.$$lastDirtyWatch = null;  // reset in order to accomodate watch added via dirty watch listener
     };
     
     Scope.prototype.$$areEqual = function( newValue , oldValue , valueBasedEquality ) {
@@ -75,16 +80,26 @@
     };
     
     Scope.prototype.$digest = function() {
-        var digestTTL = 10 ,  // Time To Live  
+        var scope = this , 
+            digestTTL = 10 ,  // Time To Live  
             digestTTLCount = digestTTL;
         
-        this.$$lastDirtyWatch = null;  // reset on each new $digest()
+        scope.$$lastDirtyWatch = null;  // reset on each new $digest()
         
         // handle when listeners trigger chained watches in same $digest()
         // invoke $digest() repeatedly until its no longer dirty
-        while ( this.$$digestOnce() ) {
+        while ( processAsyncQueue( scope ) , scope.$$digestOnce() ) {
             if ( !( digestTTLCount-- ) ) {
                 throw new Error( 'Digest TTL (' + digestTTL + ') has been exceeded.' );
+            }
+        }
+        
+        function processAsyncQueue( scope ) {
+            var asyncTask;
+            
+            while ( scope.$$asyncQueue.length ) {
+                asyncTask = scope.$$asyncQueue.shift();
+                asyncTask.scope.$eval( asyncTask.cb , asyncTask.arg );
             }
         }
     };
@@ -95,6 +110,18 @@
         return cb( scope , arg );
     };
 
+    Scope.prototype.$evalAsync = function( cb , arg ) {
+        var scope = this;
+
+        scope.$$asyncQueue.push(
+            {
+                'scope' : scope ,
+                'cb' : cb ,
+                'arg' : arg
+            }
+        );
+    };
+    
     Scope.prototype.$apply = function( cb , arg ) {
         var scope = this;
         
