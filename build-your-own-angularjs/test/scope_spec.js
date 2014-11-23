@@ -374,6 +374,20 @@
                 scope.$digest();
                 expect( scope.asyncEvaluatedCount ).to.equal( 2 );
             });
+
+            it( 'execute $evalAsync functions via watch functions infinitely, TTL' , function() {
+                scope.theValue = 'robert';
+
+                scope.$watch(
+                    function( scope ) {
+                        scope.$evalAsync( function( scope ){});
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ){}
+                );
+                
+                expect( function(){ scope.$digest(); } ).to.throw( Error );
+            });
             
         });
 
