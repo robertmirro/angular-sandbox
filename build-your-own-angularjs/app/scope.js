@@ -23,6 +23,7 @@
         scope.$$watches = [];
         scope.$$lastDirtyWatch = null;
         scope.$$asyncQueue = [];
+        scope.$$phase = null;
     }
 
     Scope.prototype.$watch = function( fnWatch , fnListener , valueBasedEquality ) {
@@ -89,10 +90,15 @@
         // handle when listeners trigger chained watches in same $digest()
         // invoke $digest() repeatedly until its no longer dirty
         // continue while loop while (1) previous digest was dirty OR (2) while asyncQueue needs to be processed (as a result of $evalAsync invoked from a watch)
-        while ( processAsyncQueue( scope ) , ( scope.$$digestOnce() || scope.$$asyncQueue.length ) ) {
-            if ( !( digestTTLCount-- ) ) {
-                throw new Error( 'Digest TTL (' + digestTTL + ') has been exceeded.' );
+        scope.$beginPhase( '$digest' );
+        try {
+            while ( processAsyncQueue( scope ) , ( scope.$$digestOnce() || scope.$$asyncQueue.length ) ) {
+                if ( !( digestTTLCount-- ) ) {
+                    throw new Error( 'Digest TTL (' + digestTTL + ') has been exceeded.' );
+                }
             }
+        } finally {
+            scope.$clearPhase();
         }
         
         function processAsyncQueue( scope ) {
@@ -126,11 +132,29 @@
     Scope.prototype.$apply = function( cb , arg ) {
         var scope = this;
         
+        scope.$beginPhase( '$apply' );
         try {
             return scope.$eval( cb , arg );
         } finally {
+            scope.$clearPhase(); // clear phase BEFORE $digest
             scope.$digest();
         }
+    };
+    
+    // $$phase === '$digest' || '$apply' || null
+    Scope.prototype.$beginPhase = function( phase ) {
+        var scope = this;
+
+        if ( scope.$$phase ) {
+            throw new Error( scope.$$phase + ' is in progress.' );
+        }
+        scope.$$phase = phase;
+    };
+
+    Scope.prototype.$clearPhase = function( phase ) {
+        var scope = this;
+
+        scope.$$phase = null;
     };
     
 })();

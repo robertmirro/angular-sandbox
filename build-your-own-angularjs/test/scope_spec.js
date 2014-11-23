@@ -380,7 +380,7 @@
 
                 scope.$watch(
                     function( scope ) {
-                        scope.$evalAsync( function( scope ){});
+                        scope.$evalAsync( function( scope ){}); // schedule $evalAsync() infinitely
                         return scope.theValue; 
                     } , 
                     function( newValue , oldValue , scope ){}
@@ -388,6 +388,33 @@
                 
                 expect( function(){ scope.$digest(); } ).to.throw( Error );
             });
+            
+            it( 'scope has $$phase field that represents current digest phase' , function() {
+                scope.theValue = 'robert';
+                scope.phaseInWatchFn = undefined;
+                scope.phaseInListenerFn = undefined;
+                scope.phaseInApplyFn = undefined;
+                
+                scope.$watch(
+                    function( scope ) {
+                        scope.phaseInWatchFn = scope.$$phase;
+                        return scope.theValue; 
+                    } , 
+                    function( newValue , oldValue , scope ){
+                        scope.phaseInListenerFn = scope.$$phase;
+                    }
+                );
+                
+                scope.$apply( function( scope ) {
+                    scope.phaseInApplyFn = scope.$$phase;
+                });
+                
+                // dont need to manually invoke $digest(), $apply() handles that
+                expect( scope.phaseInWatchFn ).to.equal( '$digest' );
+                expect( scope.phaseInListenerFn ).to.equal( '$digest' );
+                expect( scope.phaseInApplyFn ).to.equal( '$apply' );
+            });
+            
             
         });
 
