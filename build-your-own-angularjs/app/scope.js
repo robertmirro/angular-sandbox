@@ -23,7 +23,7 @@
         scope.$$watches = [];
         scope.$$lastDirtyWatch = null;
         scope.$$asyncQueue = [];
-        scope.$$phase = null;
+        scope.$$phase = null;  // $$phase === '$digest' || '$apply' || null
     }
 
     Scope.prototype.$watch = function( fnWatch , fnListener , valueBasedEquality ) {
@@ -150,7 +150,6 @@
         }
     };
     
-    // $$phase === '$digest' || '$apply' || null
     Scope.prototype.$beginPhase = function( phase ) {
         var scope = this;
 
