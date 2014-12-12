@@ -23,6 +23,15 @@
                 $scope.factoryValue = aFactory;
                 $scope.serviceValue = aService.serviceValue;
                 $scope.valueValue = aValue;
+
+                setTimeout( function() { 
+                    aValue += 'NEW VALUE...';
+                    $scope.valueValue = aValue;
+                    $scope.$apply();
+                    console.log($scope);
+                    console.log( 'aValue:' , aValue );
+                } , 3000 );
+
             }
         ]);
 })();
