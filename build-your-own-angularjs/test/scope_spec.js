@@ -284,7 +284,6 @@
 
                 scope.$digest();
                 expect( theCount ).to.equal( 1 );
-
             });
 
             it( 'execute $eval function, return result' , function() {
