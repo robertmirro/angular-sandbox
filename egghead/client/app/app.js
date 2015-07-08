@@ -22,11 +22,11 @@ angular.module('eggheadApp', [
             field: '$scope.dot.field'
         };
         $vm.field = '$scope.field';
-        console.log('$scope 1:', $scope);
+        console.log('$scope 1:', $scope, '- $scope === this?', $scope === this);
     })
 
     .controller('egg_2', function($scope) {
         // $scope.theScope = 'egg_1 scope';
-        console.log('$scope 2:', $scope);
+        console.log('$scope 2:', $scope, '- $scope === this?', $scope === this);
     });
 
