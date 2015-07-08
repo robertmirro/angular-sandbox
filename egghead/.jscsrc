@@ -1,0 +1,22 @@
+{
+    "preset": "google",
+    "fileExtensions": [".js", "jscs"],
+
+    /* google overrides */
+    "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
+    "disallowMultipleVarDecl": null,
+    "validateIndentation": 4,
+
+    "requireParenthesesAroundIIFE": true,
+    "maximumLineLength": 120,
+    /* "validateLineBreaks": "LF", */
+
+    "disallowSpacesInsideObjectBrackets": null,
+    "disallowImplicitTypeConversion": ["string"],
+
+    "safeContextKeyword": "_this",
+
+    "excludeFiles": [
+        "test/data/**"
+    ]
+}
