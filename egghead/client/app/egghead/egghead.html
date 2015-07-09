@@ -1,7 +1,19 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="col-md-12">
-{{ message }}, this is the egghead view.
+    {{ message }}, this is the egghead view.
+</div>
+
+<div class="egghead" ng-controller="egg_1">
+    egg_1: $scope.dot.field: (<strong>{{ dot.field }}</strong>) $scope.field: (<strong>{{ field }}</strong>) <br />
+    $scope.dot.field: <input type="text" name="egg_1_1" ng-model="dot.field" /> <br />
+    $scope.field: <input type="text" name="egg_1_2" ng-model="field" /> <br />
+
+    <div class="egghead" ng-controller="egg_2">
+        egg_2: $scope.dot.field: (<strong>{{ dot.field }}</strong>) $scope.field: (<strong>{{ field }}</strong>) <br />
+        $scope.dot.field: <input type="text" name="egg_2_1" ng-model="dot.field" /> <br />
+        $scope.field: <input type="text" name="egg_2_2" ng-model="field" /> <br />
+    </div>
 </div>
 
 
