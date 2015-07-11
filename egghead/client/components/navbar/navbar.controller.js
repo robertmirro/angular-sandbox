@@ -5,10 +5,12 @@ angular
 .controller('NavbarCtrl', function($scope, $location) {
     $scope.menu = [{
         'title': 'Home',
-        'link': '/'
+        'link': '/',
+        'state': 'main'
     }, {
         'title': 'Egghead',
-        'link': '/egghead'
+        'link': '/egghead',
+        'state': 'egghead'
     }];
 
     $scope.isCollapsed = true;
