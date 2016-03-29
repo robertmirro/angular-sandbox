@@ -6,20 +6,34 @@
         .controller('theController', theController)
         .provider('theProvider', theProvider)
         .config(theProviderConfig2)
+        .config(theProviderConfigDecorator)
         .provider('theProvider', theOtherProvider)
         .decorator('theProvider', theProviderDecorator)
         .config(theProviderConfig1);
 
     function theProviderConfig1(theProviderProvider) {
-        console.log('theProviderConfig1...', theProviderProvider.getInternalProperty());
+        console.log('theProviderConfig1...\n  ', theProviderProvider.getInternalProperty());
 
         theProviderProvider.setInternalProperty('-theProviderConfig1');
     }
 
     function theProviderConfig2(theProviderProvider) {
-        console.log('theProviderConfig2...', theProviderProvider.getInternalProperty());
+        console.log('theProviderConfig2...\n  ', theProviderProvider.getInternalProperty());
 
         theProviderProvider.setInternalProperty('-theProviderConfig2');
+    }
+
+    function theProviderConfigDecorator($provide) {
+        console.log('theProviderConfigDecorator...');
+
+        $provide.decorator('theProvider', function($delegate) {
+            console.log('theProviderConfigDecorator - $provide.decorator...\n  ', $delegate);
+
+            $delegate.theInternalProperty += '-theProviderConfigDecorator';
+            $delegate.theProperty += '-theProviderConfigDecorator';
+            $delegate.theDecoratedProperty += ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderConfigDecorator';
+            return $delegate;
+        });
     }
 
     function theController(theProvider) {
@@ -69,7 +83,7 @@
 
     function theProviderDecorator($delegate) {
         console.log('theProviderDecorator...');
-        $delegate.theDecoratedProperty = 'theProviderDecorator';
+        $delegate.theDecoratedProperty += ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderDecorator';
         return $delegate;
     }
 })();
