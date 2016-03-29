@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('theApp', [])
+        .module('theApp', [], theModuleConfig)
         .controller('theController', theController)
         .provider('theProvider', theProvider)
         .config(theProviderConfig2)
@@ -10,6 +10,14 @@
         .provider('theProvider', theOtherProvider)
         .decorator('theProvider', theProviderDecorator)
         .config(theProviderConfig1);
+
+    function theModuleConfig(theProviderProvider) {
+        console.log('theModuleConfig...');
+
+        console.log('\tBEFORE:', theProviderProvider.getInternalProperty());
+        theProviderProvider.setInternalProperty(' - theModuleConfig');
+        console.log('\tAFTER: ', theProviderProvider.getInternalProperty());
+    }
 
     function theProviderConfig1(theProviderProvider) {
         console.log('theProviderConfig1...');
