@@ -4,34 +4,52 @@
     angular
         .module('theApp', [])
         .controller('theController', theController)
-        .factory('theFactory', theFactory)
-        .factory('theFactory', theOtherFactory)
-    //.decorator('theFactory', theFactoryDecorator)
-    ;
+        .provider('theProvider', theProvider)
+        .provider('theProvider', theOtherProvider)
+        .decorator('theProvider', theProviderDecorator);
 
-    function theController(theFactory) {
+    function theController(theProvider) {
         console.log('theController...');
         this.dateTime = new Date();
-        this.theFactory = theFactory;
+        this.theProvider = theProvider;
     }
 
-    function theFactory() {
-        console.log('theFactory...');
-        return {
-            theProperty: 'theFactory'
+    function theProvider() {
+        console.log('theProvider...');
+
+        var theInternalProperty = 'theProviderInternal';
+
+        this.setInternalProperty = function(value) {
+            theInternalProperty += value;
+        };
+        this.$get = function $get() {
+            return {
+                theInternalProperty: theInternalProperty,
+                theProperty: 'theProvider'
+            };
         };
     }
 
-    function theOtherFactory() {
-        console.log('theOtherFactory...');
-        return {
-            theProperty: 'theOtherFactory'
+    function theOtherProvider() {
+        console.log('theOtherProvider...');
+
+        var theInternalProperty = 'theOtherProviderInternal';
+
+        this.setInternalProperty = function(value) {
+            theInternalProperty += value;
+        };
+
+        this.$get = function $get() {
+            return {
+                theInternalProperty: theInternalProperty,
+                theProperty: 'theOtherProvider'
+            };
         };
     }
 
-    function theFactoryDecorator($delegate) {
-        console.log('theFactoryDecorator...');
-        $delegate.theDecoratedProperty = 'theFactoryDecorator';
+    function theProviderDecorator($delegate) {
+        console.log('theProviderDecorator...');
+        $delegate.theDecoratedProperty = 'theProviderDecorator';
         return $delegate;
     }
 })();
