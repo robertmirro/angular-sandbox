@@ -31,7 +31,7 @@
 
             $delegate.theInternalProperty += '-theProviderConfigDecorator';
             $delegate.theProperty += '-theProviderConfigDecorator';
-            $delegate.theDecoratedProperty += ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderConfigDecorator';
+            $delegate.theDecoratedProperty = ($delegate.theDecoratedProperty || '') + ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderConfigDecorator';
             return $delegate;
         });
     }
@@ -82,8 +82,8 @@
     }
 
     function theProviderDecorator($delegate) {
-        console.log('theProviderDecorator...');
-        $delegate.theDecoratedProperty += ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderDecorator';
+        console.log('theProviderDecorator...\n  ', $delegate);
+        $delegate.theDecoratedProperty = ($delegate.theDecoratedProperty || '') + ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderDecorator';
         return $delegate;
     }
 })();
