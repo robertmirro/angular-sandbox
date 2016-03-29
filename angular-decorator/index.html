@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="theApp">
+<head>
+    <title>Angular Decorator</title>
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+        div span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="ng-cloak">
+    <div ng-controller="theController as vm">
+        <div><span>Date/Time:</span> {{vm.dateTime}}</div>
+        <div><span>theFactory.theProperty:</span> {{vm.theFactory.theProperty}}</div>
+        <div><span>theFactory.theDecoratedProperty:</span> {{vm.theFactory.theDecoratedProperty}}</div>
+    </div>
+
+    <script src="jquery.js"></script>
+    <script src="angular.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
