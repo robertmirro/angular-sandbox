@@ -15,7 +15,7 @@
         console.log('theProviderConfig1...');
 
         console.log('  BEFORE:', theProviderProvider.getInternalProperty());
-        theProviderProvider.setInternalProperty('-theProviderConfig1');
+        theProviderProvider.setInternalProperty(' - theProviderConfig1');
         console.log('  AFTER: ', theProviderProvider.getInternalProperty());
     }
 
@@ -23,7 +23,7 @@
         console.log('theProviderConfig2...');
 
         console.log('  BEFORE:', theProviderProvider.getInternalProperty());
-        theProviderProvider.setInternalProperty('-theProviderConfig2');
+        theProviderProvider.setInternalProperty(' - theProviderConfig2');
         console.log('  AFTER: ', theProviderProvider.getInternalProperty());
     }
 
@@ -33,9 +33,8 @@
         $provide.decorator('theProvider', function($delegate) {
             console.log('theProviderConfigDecorator - DECORATOR...\n  ', $delegate);
 
-            $delegate.theInternalProperty += '-theProviderConfigDecorator';
-            $delegate.theProperty += '-theProviderConfigDecorator';
-            $delegate.theDecoratedProperty = ($delegate.theDecoratedProperty || '') + ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderConfigDecorator';
+            $delegate.theInternalProperty = ($delegate.theInternalProperty || '') + ($delegate.theInternalProperty ? ' - ' : '') + 'theProviderConfigDecorator';
+            $delegate.theProperty = ($delegate.theProperty || '') + ($delegate.theProperty ? ' - ' : '') + 'theProviderConfigDecorator';
             return $delegate;
         });
     }
@@ -81,7 +80,9 @@
 
     function theProviderDecorator($delegate) {
         console.log('theProviderDecorator...\n  ', $delegate);
-        $delegate.theDecoratedProperty = ($delegate.theDecoratedProperty || '') + ($delegate.theDecoratedProperty ? ' - ' : '') + 'theProviderDecorator';
+
+        $delegate.theInternalProperty = ($delegate.theInternalProperty || '') + ($delegate.theInternalProperty ? ' - ' : '') + 'theProviderDecorator';
+        $delegate.theProperty = ($delegate.theProperty || '') + ($delegate.theProperty ? ' - ' : '') + 'theProviderDecorator';
         return $delegate;
     }
 
