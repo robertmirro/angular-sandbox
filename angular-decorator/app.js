@@ -14,29 +14,41 @@
     function theProviderConfig1(theProviderProvider) {
         console.log('theProviderConfig1...');
 
-        console.log('  BEFORE:', theProviderProvider.getInternalProperty());
+        console.log('\tBEFORE:', theProviderProvider.getInternalProperty());
         theProviderProvider.setInternalProperty(' - theProviderConfig1');
-        console.log('  AFTER: ', theProviderProvider.getInternalProperty());
+        console.log('\tAFTER: ', theProviderProvider.getInternalProperty());
     }
 
     function theProviderConfig2(theProviderProvider) {
         console.log('theProviderConfig2...');
 
-        console.log('  BEFORE:', theProviderProvider.getInternalProperty());
+        console.log('\tBEFORE:', theProviderProvider.getInternalProperty());
         theProviderProvider.setInternalProperty(' - theProviderConfig2');
-        console.log('  AFTER: ', theProviderProvider.getInternalProperty());
+        console.log('\tAFTER: ', theProviderProvider.getInternalProperty());
     }
 
     function theProviderConfigDecorator($provide) {
         console.log('theProviderConfigDecorator... LOADED');
 
         $provide.decorator('theProvider', function($delegate) {
-            console.log('theProviderConfigDecorator - DECORATOR...\n  ', $delegate);
+            console.log('theProviderConfigDecorator - DECORATOR...');
 
+            console.log('\tBEFORE:', $delegate);
             $delegate.theInternalProperty = ($delegate.theInternalProperty || '') + ($delegate.theInternalProperty ? ' - ' : '') + 'theProviderConfigDecorator';
             $delegate.theProperty = ($delegate.theProperty || '') + ($delegate.theProperty ? ' - ' : '') + 'theProviderConfigDecorator';
+            console.log('\tAFTER: ', $delegate);
             return $delegate;
         });
+    }
+
+    function theProviderDecorator($delegate) {
+        console.log('theProviderDecorator...');
+
+        console.log('\tBEFORE:', $delegate);
+        $delegate.theInternalProperty = ($delegate.theInternalProperty || '') + ($delegate.theInternalProperty ? ' - ' : '') + 'theProviderDecorator';
+        $delegate.theProperty = ($delegate.theProperty || '') + ($delegate.theProperty ? ' - ' : '') + 'theProviderDecorator';
+        console.log('\tAFTER: ', $delegate);
+        return $delegate;
     }
 
     function theProvider() {
@@ -76,14 +88,6 @@
                 theProperty: 'theOtherProvider'
             };
         };
-    }
-
-    function theProviderDecorator($delegate) {
-        console.log('theProviderDecorator...\n  ', $delegate);
-
-        $delegate.theInternalProperty = ($delegate.theInternalProperty || '') + ($delegate.theInternalProperty ? ' - ' : '') + 'theProviderDecorator';
-        $delegate.theProperty = ($delegate.theProperty || '') + ($delegate.theProperty ? ' - ' : '') + 'theProviderDecorator';
-        return $delegate;
     }
 
     function theController(theProvider) {
