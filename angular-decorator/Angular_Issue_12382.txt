@@ -275,3 +275,53 @@ Date/Time: "2016-03-30T17:22:30.803Z"
 theProvider.theInternalProperty: theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1 - theProviderDecorator - theProviderConfigDecorator
 theProvider.theProperty: theOtherProvider - theProviderDecorator - theProviderConfigDecorator    
 
+=============
+=============
+
+fix(loader): module.decorator declaration no longer requires explict order of operations
+
+module.decorator() is now processed via the configBlocks order of operations and:
+- no longer throws if declared before the provider being decorated
+- guarantees the correct provider will be decorated when multiple, same-name providers are defined
+
+Closes: #12382
+
+=============
+
+**What kind of change does this PR introduce? (Bug fix, feature, docs update, ...)**
+Bug fix
+
+
+**What is the current behavior? (You can also link to an open issue here)**
+See #12382 
+
+
+**What is the new behavior (if this is a feature change)?**
+module.decorator declarations are now invoked via the configBlocks queue to ensure that the provider being decorated has been declared regardless of the order in which module.decorator is declared.
+
+
+**Does this PR introduce a breaking change?**
+Possibly.  If the same provider is decorated multiple times via a combination of module.decorator and $provide.decorator (via module.config), the decoration order may change now depending on declaration order of the module methods.
+
+
+
+**Please check if the PR fulfills these requirements**
+- [x] The commit message follows our guidelines: https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format
+- [x] Tests for the changes have been added (for bug fixes / features)
+
+**Other information**:
+
+I didn't ngdoc the added queue param of invokeLaterAndSetModuleName because this fn isn't publically exposed and queue wasn't doc'd for invokeLater.
+
+module.decorator() is now processed via the configBlocks order of operations and:
+- no longer throws if declared before the provider being decorated
+- guarantees the correct provider will be decorated when multiple,
+  same-name providers are defined
+
+Closes: #12382
+
+=============
+
+https://github.com/angular/angular.js/pull/14348
+
+=============
