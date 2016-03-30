@@ -1,6 +1,10 @@
 (function() {
     'use strict';
 
+    var l = console.log.bind(console),
+        lb = l.bind(null, '\tBEFORE:'),
+        la = l.bind(null, '\tAFTER: ');
+
     angular
         .module('theApp', [], theModuleConfig)
         .controller('theController', theController)
@@ -12,63 +16,53 @@
         .config(theProviderConfig1);
 
     function theModuleConfig(theProviderProvider) {
-        console.log('theModuleConfig...');
-
-        console.log('\tBEFORE:', theProviderProvider.getInternalProperty());
+        l('theModuleConfig...');
         theProviderProvider.setInternalProperty(' - theModuleConfig');
-        console.log('\tAFTER: ', theProviderProvider.getInternalProperty());
     }
 
     function theProviderConfig1(theProviderProvider) {
-        console.log('theProviderConfig1...');
-
-        console.log('\tBEFORE:', theProviderProvider.getInternalProperty());
+        l('theProviderConfig1...');
         theProviderProvider.setInternalProperty(' - theProviderConfig1');
-        console.log('\tAFTER: ', theProviderProvider.getInternalProperty());
     }
 
     function theProviderConfig2(theProviderProvider) {
-        console.log('theProviderConfig2...');
-
-        console.log('\tBEFORE:', theProviderProvider.getInternalProperty());
+        l('theProviderConfig2...');
         theProviderProvider.setInternalProperty(' - theProviderConfig2');
-        console.log('\tAFTER: ', theProviderProvider.getInternalProperty());
     }
 
     function theProviderConfigDecorator($provide) {
-        console.log('theProviderConfigDecorator... LOADED');
+        l('theProviderConfigDecorator... LOADED');
 
         $provide.decorator('theProvider', function($delegate) {
-            console.log('theProviderConfigDecorator - DECORATOR...');
+            l('theProviderConfigDecorator... DECORATOR');
 
-            console.log('\tBEFORE:', $delegate);
+            lb($delegate);
             $delegate.theInternalProperty = ($delegate.theInternalProperty || '') + ($delegate.theInternalProperty ? ' - ' : '') + 'theProviderConfigDecorator';
             $delegate.theProperty = ($delegate.theProperty || '') + ($delegate.theProperty ? ' - ' : '') + 'theProviderConfigDecorator';
-            console.log('\tAFTER: ', $delegate);
+            la($delegate);
             return $delegate;
         });
     }
 
     function theProviderDecorator($delegate) {
-        console.log('theProviderDecorator...');
+        l('theProviderDecorator...');
 
-        console.log('\tBEFORE:', $delegate);
+        lb($delegate);
         $delegate.theInternalProperty = ($delegate.theInternalProperty || '') + ($delegate.theInternalProperty ? ' - ' : '') + 'theProviderDecorator';
         $delegate.theProperty = ($delegate.theProperty || '') + ($delegate.theProperty ? ' - ' : '') + 'theProviderDecorator';
-        console.log('\tAFTER: ', $delegate);
+        la($delegate);
         return $delegate;
     }
 
     function theProvider() {
-        console.log('theProvider...');
+        l('theProvider...');
 
         var theInternalProperty = 'theProviderInternal';
 
-        this.getInternalProperty = function() {
-            return theInternalProperty;
-        };
         this.setInternalProperty = function(value) {
+            lb(theInternalProperty);
             theInternalProperty += value;
+            la(theInternalProperty);
         };
         this.$get = function $get() {
             return {
@@ -79,15 +73,14 @@
     }
 
     function theOtherProvider() {
-        console.log('theOtherProvider...');
+        l('theOtherProvider...');
 
         var theInternalProperty = 'theOtherProviderInternal';
 
-        this.getInternalProperty = function() {
-            return theInternalProperty;
-        };
         this.setInternalProperty = function(value) {
+            lb(theInternalProperty);
             theInternalProperty += value;
+            la(theInternalProperty);
         };
 
         this.$get = function $get() {
@@ -99,7 +92,7 @@
     }
 
     function theController(theProvider) {
-        console.log('theController...');
+        l('theController...');
         this.dateTime = new Date();
         this.theProvider = theProvider;
     }
