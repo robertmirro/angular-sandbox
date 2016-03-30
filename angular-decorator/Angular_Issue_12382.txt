@@ -1,0 +1,277 @@
+
+BREAK ON:
+function loadModules(modulesToLoad)
+    runBlocks = runBlocks.concat(loadModules(moduleFn.requires)).concat(moduleFn._runBlocks);
+
+RUN:
+moduleFn._invokeQueue.forEach(function(a){console.log('invokeQueue: %s.%s -> fn:%s', a[0], a[1], a[2][1].name)});
+moduleFn._configBlocks.forEach(function(a){console.log('configBlocks: %s.%s -> fn:%s', a[0], a[1], a[2][1] ? a[2][1].name : a[2][0].name)});
+
+========================================
+========================================
+
+decorator: invokeLaterAndSetModuleName('$provide', 'decorator'),
+// decorator: invokeLaterAndSetModuleName('$provide', 'decorator', configBlocks),
+
+angular
+    .module('theApp', [], theModuleConfig)
+    .controller('theController', theController)
+    .provider('theProvider', theProvider)
+    .config(theProviderConfig2)
+    .config(theProviderConfigDecorator)
+    .provider('theProvider', theOtherProvider)
+    .decorator('theProvider', theProviderDecorator)
+    .config(theProviderConfig1);
+
+invokeQueue:  $controllerProvider.register -> fn:theController
+invokeQueue:  $provide.provider -> fn:theProvider
+invokeQueue:  $provide.provider -> fn:theOtherProvider
+invokeQueue:  $provide.decorator -> fn:theProviderDecorator
+configBlocks: $injector.invoke -> fn:theModuleConfig
+configBlocks: $injector.invoke -> fn:theProviderConfig2
+configBlocks: $injector.invoke -> fn:theProviderConfigDecorator
+configBlocks: $injector.invoke -> fn:theProviderConfig1
+
+theProvider...
+theOtherProvider...
+theModuleConfig...
+  BEFORE: theOtherProviderInternal
+  AFTER:  theOtherProviderInternal - theModuleConfig
+theProviderConfig2...
+  BEFORE: theOtherProviderInternal - theModuleConfig
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2
+theProviderConfigDecorator... LOADED
+theProviderConfig1...
+  BEFORE: theOtherProviderInternal - theModuleConfig - theProviderConfig2
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+  
+---- CONTROLLER: when theController is instantianted, theProvider is injected causing the activity below --- 
+
+theOtherProvider.$get... theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+theProviderDecorator...
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1", theProperty: "theOtherProvider"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…nfig2 - theProviderConfig1 - theProviderDecorator", theProperty: "theOtherProvider - theProviderDecorator"}
+theProviderConfigDecorator... DECORATOR
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…nfig2 - theProviderConfig1 - theProviderDecorator", theProperty: "theOtherProvider - theProviderDecorator"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…theProviderDecorator - theProviderConfigDecorator", theProperty: "theOtherProvider - theProviderDecorator - theProviderConfigDecorator"}
+theController...
+
+---- RESULT: ----
+
+Date/Time: "2016-03-30T17:01:33.108Z"
+theProvider.theInternalProperty: theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1 - theProviderDecorator - theProviderConfigDecorator
+theProvider.theProperty: theOtherProvider - theProviderDecorator - theProviderConfigDecorator
+
+========================================
+
+decorator: invokeLaterAndSetModuleName('$provide', 'decorator'),
+// decorator: invokeLaterAndSetModuleName('$provide', 'decorator', configBlocks),
+
+angular
+    .module('theApp', [], theModuleConfig)
+    .controller('theController', theController)
+    .provider('theProvider', theProvider)
+    .decorator('theProvider', theProviderDecorator) /* DECORATOR DEFINED AFTER 1ST PROVIDER (theProvider) AND BEFORE THE PROVIDER IT IS SUPPOSED TO DECORATE (theOtherProvider) - CAUSES theOtherProvider TO NOT BE DECORATED */
+    .config(theProviderConfig2)
+    .config(theProviderConfigDecorator)
+    .provider('theProvider', theOtherProvider)
+    .config(theProviderConfig1);
+
+invokeQueue:  $controllerProvider.register -> fn:theController
+invokeQueue:  $provide.provider -> fn:theProvider
+invokeQueue:  $provide.decorator -> fn:theProviderDecorator
+invokeQueue:  $provide.provider -> fn:theOtherProvider
+configBlocks: $injector.invoke -> fn:theModuleConfig
+configBlocks: $injector.invoke -> fn:theProviderConfig2
+configBlocks: $injector.invoke -> fn:theProviderConfigDecorator
+configBlocks: $injector.invoke -> fn:theProviderConfig1
+
+theProvider...
+theOtherProvider...
+theModuleConfig...
+  BEFORE: theOtherProviderInternal
+  AFTER:  theOtherProviderInternal - theModuleConfig
+theProviderConfig2...
+  BEFORE: theOtherProviderInternal - theModuleConfig
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2
+theProviderConfigDecorator... LOADED
+theProviderConfig1...
+  BEFORE: theOtherProviderInternal - theModuleConfig - theProviderConfig2
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+  
+---- CONTROLLER: when theController is instantianted, theProvider is injected causing the activity below --- 
+  
+theOtherProvider.$get... theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+theProviderConfigDecorator... DECORATOR
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1", theProperty: "theOtherProvider"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…- theProviderConfig1 - theProviderConfigDecorator", theProperty: "theOtherProvider - theProviderConfigDecorator"}
+theController...
+
+---- RESULT: ----
+
+Date/Time: "2016-03-30T18:28:20.239Z"
+theProvider.theInternalProperty: theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1 - theProviderConfigDecorator
+theProvider.theProperty: theOtherProvider - theProviderConfigDecorator
+
+========================================
+
+// decorator: invokeLaterAndSetModuleName('$provide', 'decorator'),
+decorator: invokeLaterAndSetModuleName('$provide', 'decorator', configBlocks),
+
+angular
+    .module('theApp', [], theModuleConfig)
+    .controller('theController', theController)
+    .provider('theProvider', theProvider)
+    .config(theProviderConfig2)
+    .config(theProviderConfigDecorator)
+    .provider('theProvider', theOtherProvider)
+    .decorator('theProvider', theProviderDecorator)  /* DECORATOR DEFINED AFTER PROVIDER IT IS SUPPOSED TO DECORATE (theOtherProvider) - THIS WORKS AS EXPECTED PRE-RJM-FIX AND FIX DOES NOT BREAK IT */
+    .config(theProviderConfig1);
+
+invokeQueue:  $controllerProvider.register -> fn:theController
+invokeQueue:  $provide.provider -> fn:theProvider
+invokeQueue:  $provide.provider -> fn:theOtherProvider
+configBlocks: $injector.invoke -> fn:theModuleConfig
+configBlocks: $injector.invoke -> fn:theProviderConfig2
+configBlocks: $injector.invoke -> fn:theProviderConfigDecorator
+configBlocks: $provide.decorator -> fn:theProviderDecorator
+configBlocks: $injector.invoke -> fn:theProviderConfig1
+
+theProvider...
+theOtherProvider...
+theModuleConfig...
+  BEFORE: theOtherProviderInternal
+  AFTER:  theOtherProviderInternal - theModuleConfig
+theProviderConfig2...
+  BEFORE: theOtherProviderInternal - theModuleConfig
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2
+theProviderConfigDecorator... LOADED
+theProviderConfig1...
+  BEFORE: theOtherProviderInternal - theModuleConfig - theProviderConfig2
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+  
+---- CONTROLLER: when theController is instantianted, theProvider is injected causing the activity below --- 
+  
+theOtherProvider.$get... theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+theProviderConfigDecorator... DECORATOR
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1", theProperty: "theOtherProvider"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…- theProviderConfig1 - theProviderConfigDecorator", theProperty: "theOtherProvider - theProviderConfigDecorator"}
+theProviderDecorator...
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…- theProviderConfig1 - theProviderConfigDecorator", theProperty: "theOtherProvider - theProviderConfigDecorator"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…theProviderConfigDecorator - theProviderDecorator", theProperty: "theOtherProvider - theProviderConfigDecorator - theProviderDecorator"}
+theController...
+
+---- RESULT: WORKS ----
+
+Date/Time: "2016-03-30T17:04:14.129Z"
+theProvider.theInternalProperty: theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1 - theProviderConfigDecorator - theProviderDecorator
+theProvider.theProperty: theOtherProvider - theProviderConfigDecorator - theProviderDecorator
+
+========================================
+
+// decorator: invokeLaterAndSetModuleName('$provide', 'decorator'),
+decorator: invokeLaterAndSetModuleName('$provide', 'decorator', configBlocks),
+
+angular
+    .module('theApp', [], theModuleConfig)
+    .controller('theController', theController)
+    .decorator('theProvider', theProviderDecorator)  /* DECORATOR DEFINED BEFORE BOTH PROVIDERS (theProvider and theOtherProvider) - CAUSES ERROR PRE-RJM-FIX */
+    .provider('theProvider', theProvider)
+    .config(theProviderConfig2)
+    .config(theProviderConfigDecorator)
+    .provider('theProvider', theOtherProvider)
+    .config(theProviderConfig1);
+
+invokeQueue:  $controllerProvider.register -> fn:theController
+invokeQueue:  $provide.provider -> fn:theProvider
+invokeQueue:  $provide.provider -> fn:theOtherProvider
+configBlocks: $injector.invoke -> fn:theModuleConfig
+configBlocks: $provide.decorator -> fn:theProviderDecorator
+configBlocks: $injector.invoke -> fn:theProviderConfig2
+configBlocks: $injector.invoke -> fn:theProviderConfigDecorator
+configBlocks: $injector.invoke -> fn:theProviderConfig1
+
+theProvider...
+theOtherProvider...
+theModuleConfig...
+  BEFORE: theOtherProviderInternal
+  AFTER:  theOtherProviderInternal - theModuleConfig
+theProviderConfig2...
+  BEFORE: theOtherProviderInternal - theModuleConfig
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2
+theProviderConfigDecorator... LOADED
+theProviderConfig1...
+  BEFORE: theOtherProviderInternal - theModuleConfig - theProviderConfig2
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+  
+---- CONTROLLER: when theController is instantianted, theProvider is injected causing the activity below --- 
+  
+theOtherProvider.$get... theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+theProviderDecorator...
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1", theProperty: "theOtherProvider"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…nfig2 - theProviderConfig1 - theProviderDecorator", theProperty: "theOtherProvider - theProviderDecorator"}
+theProviderConfigDecorator... DECORATOR
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…nfig2 - theProviderConfig1 - theProviderDecorator", theProperty: "theOtherProvider - theProviderDecorator"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…theProviderDecorator - theProviderConfigDecorator", theProperty: "theOtherProvider - theProviderDecorator - theProviderConfigDecorator"}
+theController...
+
+---- RESULT: ----
+
+Date/Time: "2016-03-30T17:13:38.075Z"
+theProvider.theInternalProperty: theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1 - theProviderDecorator - theProviderConfigDecorator
+theProvider.theProperty: theOtherProvider - theProviderDecorator - theProviderConfigDecorator
+
+========================================
+
+// decorator: invokeLaterAndSetModuleName('$provide', 'decorator'),
+decorator: invokeLaterAndSetModuleName('$provide', 'decorator', configBlocks),
+
+angular
+    .module('theApp', [], theModuleConfig)
+    .controller('theController', theController)
+    .provider('theProvider', theProvider)
+    .decorator('theProvider', theProviderDecorator) /* DECORATOR DEFINED AFTER 1ST PROVIDER (theProvider) AND BEFORE THE PROVIDER IT IS SUPPOSED TO DECORATE (theOtherProvider) - CAUSES theOtherProvider TO NOT BE DECORATED PRE-RJM-FIX */
+    .config(theProviderConfig2)
+    .config(theProviderConfigDecorator)
+    .provider('theProvider', theOtherProvider)
+    .config(theProviderConfig1);
+
+invokeQueue:  $controllerProvider.register -> fn:theController
+invokeQueue:  $provide.provider -> fn:theProvider
+invokeQueue:  $provide.provider -> fn:theOtherProvider
+configBlocks: $injector.invoke -> fn:theModuleConfig
+configBlocks: $provide.decorator -> fn:theProviderDecorator
+configBlocks: $injector.invoke -> fn:theProviderConfig2
+configBlocks: $injector.invoke -> fn:theProviderConfigDecorator
+configBlocks: $injector.invoke -> fn:theProviderConfig1
+
+theProvider...
+theOtherProvider...
+theModuleConfig...
+  BEFORE: theOtherProviderInternal
+  AFTER:  theOtherProviderInternal - theModuleConfig
+theProviderConfig2...
+  BEFORE: theOtherProviderInternal - theModuleConfig
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2
+theProviderConfigDecorator... LOADED
+theProviderConfig1...
+  BEFORE: theOtherProviderInternal - theModuleConfig - theProviderConfig2
+  AFTER:  theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+  
+---- CONTROLLER: when theController is instantianted, theProvider is injected causing the activity below --- 
+  
+theOtherProvider.$get... theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1
+theProviderDecorator...
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1", theProperty: "theOtherProvider"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…nfig2 - theProviderConfig1 - theProviderDecorator", theProperty: "theOtherProvider - theProviderDecorator"}
+theProviderConfigDecorator... DECORATOR
+  BEFORE: Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…nfig2 - theProviderConfig1 - theProviderDecorator", theProperty: "theOtherProvider - theProviderDecorator"}
+  AFTER:  Object {theInternalProperty: "theOtherProviderInternal - theModuleConfig - thePr…theProviderDecorator - theProviderConfigDecorator", theProperty: "theOtherProvider - theProviderDecorator - theProviderConfigDecorator"}
+theController...
+
+---- RESULT: WORKS ----
+
+Date/Time: "2016-03-30T17:22:30.803Z"
+theProvider.theInternalProperty: theOtherProviderInternal - theModuleConfig - theProviderConfig2 - theProviderConfig1 - theProviderDecorator - theProviderConfigDecorator
+theProvider.theProperty: theOtherProvider - theProviderDecorator - theProviderConfigDecorator    
+

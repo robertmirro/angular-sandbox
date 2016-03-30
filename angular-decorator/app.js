@@ -9,10 +9,10 @@
         .module('theApp', [], theModuleConfig)
         .controller('theController', theController)
         .provider('theProvider', theProvider)
+        .decorator('theProvider', theProviderDecorator)
         .config(theProviderConfig2)
         .config(theProviderConfigDecorator)
         .provider('theProvider', theOtherProvider)
-        .decorator('theProvider', theProviderDecorator)
         .config(theProviderConfig1);
 
     function theModuleConfig(theProviderProvider) {
@@ -65,6 +65,7 @@
             la(theInternalProperty);
         };
         this.$get = function $get() {
+            l('theProvider.$get...', theInternalProperty);
             return {
                 theInternalProperty: theInternalProperty,
                 theProperty: 'theProvider'
@@ -84,6 +85,7 @@
         };
 
         this.$get = function $get() {
+            l('theOtherProvider.$get...', theInternalProperty);
             return {
                 theInternalProperty: theInternalProperty,
                 theProperty: 'theOtherProvider'
