@@ -324,4 +324,110 @@ Closes: #12382
 
 https://github.com/angular/angular.js/pull/14348
 
-=============
+=================================================================
+=================================================================
+
+Friday, April 29, 2016 6:45 PM
+
+I've made the following changes:
+- relocated the `Closes` tag to come before `BREAKING CHANGE:` in the commit message
+- renamed fn name examples in the commit message
+- created an additional unit test
+
+
+Regarding the additional unit test...
+
+I included the additional unit test in `loaderSpec` (as opposed to `injectorSpec`) because the failure described via #12382 is relevant to `module`.
+
+However, I'm not entirely convinced this test is necessary because this PR is meant to move the processing of `module.decorator` declarations to the `configBlocks` queue. The originally modified unit test in `loaderSpec` proves that change works.
+
+
+Regarding the `Closes` tag... 
+
+Neither the [Contributing to AngularJS](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#footer) nor the [AngularJS Git Commit Message Conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#heading=h.uh9jqqu4fjy3) documents seem to specify that the `Closes #<issue number>` tag **needs** to come before `BREAKING CHANGE:`.  In fact, the outline section displayed at the top of [AngularJS Git Commit Message Conventions](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#) seems to indicate _Referencing issues_ comes last in the _Message footer_.
+
+Many BC commits seem to follow this pattern: [d06431e](https://github.com/angular/angular.js/commit/d06431e5309bb0125588877451dc79b935808134), [98c2db7](https://github.com/angular/angular.js/commit/98c2db7f9c2d078a408576e722407d518c7ee10a), [98528be](https://github.com/angular/angular.js/commit/98528be311b48269ba0e15ba4e3e2ad9b89693a9), [983b059](https://github.com/angular/angular.js/commit/983b0598121a8c5a3a51a30120e114d7e3085d4d), etc...
+
+Maybe the docs can be updated if format is critical and the above is no longer acceptable?
+
+Thanks!
+
+---
+
+fix(loader): module.decorator order of operations is now irrelevant
+
+`module.decorator` is now processed via the configBlocks order of operations and:
+  1. no longer throws if declared before the provider being decorated.
+  2. guarantees the correct provider will be decorated when multiple, same-name 
+  providers are defined.
+
+(1) Prior to this fix, declaring `module.decorator` before the provider that it 
+decorates results in throwing an error:
+
+```js
+angular
+  .module('theApp', [])
+  .decorator('theFactory', moduleDecoratorFn)
+  .factory('theFactory', theFactoryFn);
+
+// Error: [$injector:modulerr] Failed to instantiate module theApp due to:
+// Error: [$injector:unpr] Unknown provider: theFactoryProvider  
+```
+
+The result of this fix now allows for the declaration order above.
+
+(2) Prior to this fix, declaring `module.decorator` before the final, same-named 
+provider results in that provider **not** being decorated as expected:
+
+**NOTE:** Angular does not use provider name spacing, so the final declared 
+provider is selected if multiple, same-named providers are declared.
+
+```js
+angular
+  .module('theApp', [])
+  .factory('theFactory', theFactoryFn)
+  .decorator('theFactory', moduleDecoratorFn)
+  .factory('theFactory', theOtherFactoryFn);
+
+// `theOtherFactoryFn` is selected as 'theFactory' provider but it is **not** 
+// decorated via `moduleDecoratorFn` as expected
+```
+
+The result of this fix ensures that `theOtherFactoryFn` will be decorated as 
+expected when using the declaration order above.
+
+Closes #12382
+
+BREAKING CHANGE:
+
+`module.decorator` declarations are now processed as part of the `module.config` 
+queue and may result in providers being decorated in a different order if 
+`module.config` blocks are also used to decorate providers via 
+`$provide.decorator`.
+
+For example, consider the following declaration order in which 'theFactory' is 
+decorated by both a `module.decorator` and a `$provide.decorator`:
+
+```js
+angular
+  .module('theApp', [])
+  .factory('theFactory', theFactoryFn)
+  .config(function($provide) {
+    $provide.decorator('theFactory', provideDecoratorFn);
+  })
+  .decorator('theFactory', moduleDecoratorFn);
+```
+
+Prior to this fix, 'theFactory' provider would be decorated in the following 
+order:
+  1. moduleDecoratorFn
+  2. provideDecoratorFn
+
+The result of this fix changes the order in which 'theFactory' is decorated 
+because now `module.decorator` declarations are processed in the same order as 
+`module.config` declarations:
+  1. provideDecoratorFn
+  2. moduleDecoratorFn
+
+=================================================================
+=================================================================

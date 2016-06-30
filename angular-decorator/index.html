@@ -13,9 +13,15 @@
 </head>
 <body class="ng-cloak">
     <div ng-controller="theController as vm">
-        <div><span>Date/Time:</span> {{vm.dateTime}}</div>
-        <div><span>theProvider.theInternalProperty:</span> {{vm.theProvider.theInternalProperty}}</div>
-        <div><span>theProvider.theProperty:</span> {{vm.theProvider.theProperty}}</div>
+        <div><span>Date/Time:</span> {{::vm.dateTime}}</div>
+        <div><span>theProvider.theInternalProperty:</span> {{::vm.theProvider.theInternalProperty}}</div>
+        <div><span>theProvider.theProperty:</span> {{::vm.theProvider.theProperty}}</div>
+        <div ng-if="::vm.theProvider.theProperty">
+            ng-if...
+            <div ng-show="::vm.theProvider.theInternalProperty">
+                ng-show...
+            </div>
+        </div>
     </div>
 
     <script src="jquery.js"></script>
