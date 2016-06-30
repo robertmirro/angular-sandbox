@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="theApp">
+<head>
+    <title>Angular ng-if No Watchers</title>
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+        div span {
+            font-weight: bold;
+        }
+        div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="ng-cloak">
+    <div ng-controller="theController as vm">
+        <div><span>Date/Time:</span> {{vm.dateTime}}</div>
+        <div>ng-if displayed? <input type="checkbox" ng-model="vm.displayed" ng-init="vm.displayed = true"></div>
+        <div ng-if="true && vm.displayed">
+            ng-if is displayed here... {{vm.displayed}}
+            <div ng-if="true && true && vm.displayed">
+                inner ng-if is displayed here... {{vm.displayed}}
+            </div>
+        </div>
+        <div ng-show="true && true && true && vm.displayed">
+            ng-show is displayed here... {{vm.displayed}}
+        </div>
+        <div><span>Date/Time:</span> {{vm.dateTimeLater}}</div>
+    </div>
+
+    <script src="jquery.js"></script>
+    <script src="angular.js"></script>
+    <script src="ng-if-no-watch.js"></script>
+</body>
+</html>
