@@ -22,9 +22,8 @@ const routes: RouterConfig = [
     path: 'detail/:id',
     component: HeroDetailComponent
   }
-
 ];
 
-export const APP_ROUTER_PROVIDERS = [
+export const appRouteProviders = [
   provideRouter(routes)
 ];
